@@ -1,0 +1,16 @@
+{
+  "name": "onesys-v19",
+  "version": "1.0.0",
+  "description": "ERP OneSys",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "Samuel",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^33.0.0",
+    "pg": "^8.16.3"
+  }
+}

@@ -1,0 +1,74 @@
+/* ARQUIVO: style.css (V29 - NEON + BADGES + PONTO CARD) */
+:root {
+    --primary: #00E676; /* Verde Neon */
+    --bg-body: #050505;
+    --bg-card: #111;
+    --border: 1px solid #222;
+    --radius: 8px;
+    
+    /* Cores de Status */
+    --status-pago: #00E676;
+    --status-pendente: #FFC107;
+    --status-atrasado: #FF5252;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; outline: none; font-family: 'Segoe UI', sans-serif; }
+
+body { height: 100vh; width: 100vw; background-color: var(--bg-body); color: #fff; display: flex; overflow: hidden; }
+
+/* SIDEBAR */
+.sidebar { width: 260px; height: 100%; background-color: #0a0a0a; border-right: var(--border); padding: 25px; display: flex; flex-direction: column; }
+.logo-area { font-size: 22px; font-weight: bold; color: var(--primary); margin-bottom: 40px; letter-spacing: 1px; display: flex; align-items: center; gap: 10px; }
+
+.nav-btn { background: transparent; border: none; color: #888; padding: 15px; text-align: left; cursor: pointer; width: 100%; display: flex; align-items: center; gap: 12px; transition: 0.2s; font-size: 14px; border-radius: var(--radius); }
+.nav-btn:hover { background: #1a1a1a; color: #fff; }
+.nav-btn.active { background: var(--primary); color: #000; font-weight: bold; box-shadow: 0 4px 15px rgba(0, 230, 118, 0.2); }
+
+/* CONTEÚDO */
+.main-content { flex: 1; padding: 40px; overflow-y: auto; }
+.glass-card { background: var(--bg-card); border: var(--border); padding: 25px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); position: relative; }
+
+/* FORMULÁRIOS E BOTÕES */
+input, select, button { padding: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 6px; margin-bottom: 10px; width: 100%; transition: 0.2s; }
+input:focus, select:focus { border-color: var(--primary); }
+
+.btn-primary { background: var(--primary); color: #000; font-weight: bold; border: none; cursor: pointer; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
+.btn-primary:hover { transform: scale(1.02); background: #00C853; }
+
+/* TABELAS */
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th { text-align: left; color: #666; padding: 12px; border-bottom: 1px solid #222; font-size: 12px; text-transform: uppercase; }
+td { padding: 15px; border-bottom: 1px solid #1a1a1a; font-size: 14px; }
+
+/* UTILITÁRIOS */
+.hidden { display: none; }
+.grid-form { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.full-width { grid-column: span 2; }
+.tab-btn { background: none; border: none; color: #888; padding: 10px 20px; cursor: pointer; border-bottom: 2px solid transparent; margin-right: 5px; }
+.tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: bold; }
+
+/* MODAIS */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(5px); }
+.modal-content { background: #111; border: 1px solid #333; padding: 0; border-radius: 15px; width: 900px; height: 85vh; display: flex; flex-direction: column; box-shadow: 0 0 50px rgba(0,255,118,0.1); overflow: hidden; }
+.modal-small { width: 450px; height: auto; padding: 30px; border-color: #ff5252; }
+.modal-header { padding: 20px 30px; background: #161616; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
+.modal-body { padding: 30px; overflow-y: auto; display: flex; gap: 30px; height: 100%; }
+
+/* ESTILOS ESPECÍFICOS DO PONTO (NOVO) */
+.ponto-card { display: flex; justify-content: space-between; align-items: center; background: #1a1a1a; padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #333; transition: 0.2s; }
+.ponto-card:hover { border-color: var(--primary); transform: translateX(5px); }
+.ponto-info div:first-child { font-weight: bold; color: white; font-size: 15px; }
+.ponto-info div:last-child { color: #888; font-size: 12px; margin-top: 4px; }
+.btn-ponto { border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 11px; font-weight: bold; display: flex; align-items: center; gap: 6px; width: auto; margin: 0; text-transform: uppercase; }
+.btn-presenca { background: rgba(0, 230, 118, 0.1); color: #00E676; border: 1px solid #00E676; }
+.btn-presenca:hover { background: #00E676; color: #000; }
+.btn-falta { background: rgba(255, 82, 82, 0.1); color: #FF5252; border: 1px solid #FF5252; }
+.btn-falta:hover { background: #FF5252; color: #fff; }
+
+.badge { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; text-transform: uppercase; }
+.badge-pago { background: var(--primary); color: #000; }
+.badge-pendente { background: #FFC107; color: #000; }
+.badge-atrasado { background: #FF5252; color: #fff; }
+.category-list li { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #222; }
+.action-icon { cursor: pointer; margin-left: 10px; font-size: 18px; color: #888; transition: 0.2s; }
+.action-icon:hover { color: white; transform: scale(1.2); }

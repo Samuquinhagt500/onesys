@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>OneSys Login</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Centralizar apenas no Login */
+        body { justify-content: center; align-items: center; }
+        .login-box { width: 400px; text-align: center; padding: 50px; }
+    </style>
+</head>
+<body>
+    <div class="glass-card login-box fade-in">
+        <div class="logo-area" style="justify-content: center; margin-bottom: 40px; font-size: 32px;">
+            OneSys ERP
+        </div>
+        
+        <div class="form-group">
+            <input type="text" id="user" placeholder="Usuário">
+        </div>
+        <div class="form-group">
+            <input type="password" id="pass" placeholder="Senha">
+        </div>
+        
+        <button class="btn-primary" onclick="tentarLogin()">ACESSAR SISTEMA</button>
+        <p id="error-msg" style="color: #ff5252; margin-top: 20px; font-size: 14px; display: none;">Dados incorretos.</p>
+    </div>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+        async function tentarLogin() {
+            const u = document.getElementById('user').value;
+            const p = document.getElementById('pass').value;
+            const res = await ipcRenderer.invoke('login-auth', { user: u, pass: p });
+            if(!res.sucesso) document.getElementById('error-msg').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

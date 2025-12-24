@@ -1,0 +1,18 @@
+# Dependências do Node (Pesado, não enviar)
+node_modules/
+
+# Logs de erro
+npm-debug.log
+*.log
+
+# Arquivos de sistema operacional (Lixo)
+.DS_Store
+Thumbs.db
+
+# Configurações locais (Senhas ou chaves de API)
+.env
+
+# Pastas de build/distribuição (se um dia gerares o executável)
+dist/
+release/
+out/
