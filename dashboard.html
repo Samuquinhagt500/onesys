@@ -26,6 +26,81 @@
             <div class="glass-card"><h4>Saldo Disponível</h4><h1 id="dash-saldo" style="font-size:48px; color:var(--primary);">R$ 0,00</h1></div>
         </div>
 
+        <div id="tab-estoque" class="hidden fade-in">
+            <h2>Almoxarifado Central</h2>
+            
+            <div id="est-cards" style="display:flex; gap:20px; margin-bottom:20px;">
+                <div class="glass-card" style="flex:1;">
+                    <h4 style="color:#888; font-size:12px;">TOTAL DE ITENS</h4>
+                    <h2 id="est-total-itens" style="font-size:32px; color:white;">0</h2>
+                </div>
+                <div class="glass-card" style="flex:1;">
+                    <h4 style="color:#888; font-size:12px;">VALOR EM ESTOQUE</h4>
+                    <h2 id="est-valor-total" style="font-size:32px; color:var(--primary);">R$ 0,00</h2>
+                </div>
+                <div class="glass-card" style="flex:1; cursor:pointer; border:1px dashed #444; display:flex; align-items:center; justify-content:center;" onclick="novoProduto()">
+                    <h4 style="color:var(--primary);">+ NOVO PRODUTO</h4>
+                </div>
+            </div>
+
+            <div id="est-lista" class="glass-card">
+                <div class="cat-container">
+                    <div class="cat-folder active" id="tab-cat-todos" onclick="filtrarCategoria('TODOS')">
+                        <span class="material-icons-round">inventory_2</span>
+                        <small>Geral</small>
+                    </div>
+                    <div class="cat-folder" id="tab-cat-mat" onclick="filtrarCategoria('MATERIAIS')">
+                        <span class="material-icons-round">foundation</span>
+                        <small>Materiais</small>
+                    </div>
+                    <div class="cat-folder" id="tab-cat-fer" onclick="filtrarCategoria('FERRAMENTAS')">
+                        <span class="material-icons-round">handyman</span>
+                        <small>Ferramentas</small>
+                    </div>
+                    <div class="cat-folder" id="tab-cat-epi" onclick="filtrarCategoria('EPI')">
+                        <span class="material-icons-round">engineering</span>
+                        <small>EPIs</small>
+                    </div>
+                    <div class="cat-folder" id="tab-cat-limp" onclick="filtrarCategoria('LIMPEZA')">
+                        <span class="material-icons-round">cleaning_services</span>
+                        <small>Limpeza</small>
+                    </div>
+                    <div class="cat-folder" id="tab-cat-div" onclick="filtrarCategoria('DIVERSOS')">
+                        <span class="material-icons-round">category</span>
+                        <small>Diversos</small>
+                    </div>
+                </div>
+
+                <input id="est-busca" placeholder="🔍 Buscar item..." onkeyup="filtrarEstoque()" style="margin-bottom:15px;">
+                
+                <table>
+                    <thead><tr><th>Item</th><th>Categoria</th><th>Qtd</th><th>Valor Unit.</th><th>Total</th><th>Ações</th></tr></thead>
+                    <tbody id="tb-estoque"></tbody>
+                </table>
+            </div>
+
+            <div id="est-form" class="glass-card hidden">
+                <div style="display:flex; justify-content:space-between; margin-bottom:15px;">
+                    <h4 id="titulo-form-est" style="color:var(--primary);">Cadastro de Material</h4>
+                    <button class="btn-primary" style="width:auto; background:#333;" onclick="voltarEstoque()">CANCELAR</button>
+                </div>
+                <input type="hidden" id="pd-id">
+                <div class="grid-form">
+                    <input id="pd-nome" placeholder="Nome do Produto / Material" class="full-width">
+                    <select id="pd-cat">
+                        <option value="MATERIAIS">Materiais de Construção</option>
+                        <option value="FERRAMENTAS">Ferramentas / Equipamentos</option>
+                        <option value="EPI">EPI / Segurança</option>
+                        <option value="LIMPEZA">Limpeza / Copa</option>
+                        <option value="DIVERSOS">Diversos / Outros</option>
+                    </select>
+                    <input id="pd-qtd" type="number" placeholder="Quantidade Inicial">
+                    <input id="pd-val" placeholder="Valor Unitário (R$)" oninput="formatarMoeda(this)">
+                </div>
+                <button class="btn-primary full-width" onclick="salvarProduto()" style="margin-top:15px;">SALVAR MATERIAL</button>
+            </div>
+        </div>
+
         <div id="tab-fin" class="hidden fade-in">
             <h2>Financeiro Corporativo</h2>
             <div class="glass-card" style="margin-bottom:20px;">
@@ -53,142 +128,50 @@
 
         <div id="tab-clientes" class="hidden fade-in">
             <h2>Gestão de Clientes</h2>
-            
             <div id="cli-resumo-cards" style="display:flex; gap:20px; margin-bottom:20px;">
-                <div class="glass-card" style="flex:1;">
-                    <h4 style="color:#888; font-size:12px;">CARTEIRA ATIVA</h4>
-                    <h2 id="cli-total-ativos" style="font-size:32px; color:white;">0</h2>
-                </div>
-                <div class="glass-card" style="flex:1;">
-                    <h4 style="color:#888; font-size:12px;">ARQUIVADOS</h4>
-                    <h2 id="cli-total-inativos" style="font-size:32px; color:#ff5252;">0</h2>
-                </div>
-                <div class="glass-card" style="flex:1; cursor:pointer; border:1px dashed #444; display:flex; align-items:center; justify-content:center;" onclick="novoCliente()">
-                    <h4 style="color:var(--primary);">+ NOVO CLIENTE</h4>
-                </div>
+                <div class="glass-card" style="flex:1;"><h4 style="color:#888; font-size:12px;">CARTEIRA ATIVA</h4><h2 id="cli-total-ativos" style="font-size:32px; color:white;">0</h2></div>
+                <div class="glass-card" style="flex:1;"><h4 style="color:#888; font-size:12px;">ARQUIVADOS</h4><h2 id="cli-total-inativos" style="font-size:32px; color:#ff5252;">0</h2></div>
+                <div class="glass-card" style="flex:1; cursor:pointer; border:1px dashed #444; display:flex; align-items:center; justify-content:center;" onclick="novoCliente()"><h4 style="color:var(--primary);">+ NOVO CLIENTE</h4></div>
             </div>
-
             <div id="cli-visao-geral" class="glass-card">
-                <div style="display:flex; border-bottom:1px solid #333; margin-bottom:15px;">
-                    <button class="tab-btn active" id="btn-cli-ativos" onclick="alternarVisaoClientes('ativos')">Carteira Ativa</button>
-                    <button class="tab-btn" id="btn-cli-arquivados" onclick="alternarVisaoClientes('arquivados')">Arquivados</button>
-                </div>
-
-                <div id="lista-cli-ativos">
-                    <input id="cli-busca" placeholder="🔍 Buscar cliente..." onkeyup="filtrarClientes()" style="margin-bottom:10px;">
-                    <table><thead><tr><th>Nome</th><th>Documento</th><th>Contato</th><th>Ações</th></tr></thead><tbody id="tb-clientes-ativos"></tbody></table>
-                </div>
-                
-                <div id="lista-cli-arquivados" class="hidden">
-                    <h4 style="color:#ff5252; margin-bottom:10px;">Clientes Inativos / Antigos</h4>
-                    <table><thead><tr><th>Nome</th><th>Documento</th><th>Status</th></tr></thead><tbody id="tb-clientes-inativos"></tbody></table>
-                </div>
+                <div style="display:flex; border-bottom:1px solid #333; margin-bottom:15px;"><button class="tab-btn active" id="btn-cli-ativos" onclick="alternarVisaoClientes('ativos')">Carteira Ativa</button><button class="tab-btn" id="btn-cli-arquivados" onclick="alternarVisaoClientes('arquivados')">Arquivados</button></div>
+                <div id="lista-cli-ativos"><input id="cli-busca" placeholder="🔍 Buscar cliente..." onkeyup="filtrarClientes()" style="margin-bottom:10px;"><table><thead><tr><th>Nome</th><th>Documento</th><th>Contato</th><th>Ações</th></tr></thead><tbody id="tb-clientes-ativos"></tbody></table></div>
+                <div id="lista-cli-arquivados" class="hidden"><h4 style="color:#ff5252; margin-bottom:10px;">Clientes Inativos / Antigos</h4><table><thead><tr><th>Nome</th><th>Documento</th><th>Status</th></tr></thead><tbody id="tb-clientes-inativos"></tbody></table></div>
             </div>
-
             <div id="cli-formulario" class="glass-card hidden">
-                <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-                    <h4 id="titulo-form-cli" style="color:var(--primary);">Novo Cliente</h4>
-                    <button class="btn-primary" style="width:auto; background:#333;" onclick="voltarClientes()">CANCELAR</button>
-                </div>
-                <input type="hidden" id="cli-id">
-                <div class="grid-form">
-                    <input id="cli-nome" placeholder="Nome / Razão Social">
-                    <input id="cli-doc" placeholder="CPF / CNPJ">
-                    <input id="cli-email" placeholder="E-mail">
-                    <input id="cli-tel" placeholder="Telefone">
-                    <input id="cli-end" placeholder="Endereço Completo" class="full-width">
-                </div>
-                <div style="margin-top:20px;">
-                    <button id="btn-salvar-cli" class="btn-primary full-width" onclick="salvarCliente()">SALVAR CLIENTE</button>
-                </div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:20px;"><h4 id="titulo-form-cli" style="color:var(--primary);">Novo Cliente</h4><button class="btn-primary" style="width:auto; background:#333;" onclick="voltarClientes()">CANCELAR</button></div>
+                <input type="hidden" id="cli-id"><div class="grid-form"><input id="cli-nome" placeholder="Nome / Razão Social"><input id="cli-doc" placeholder="CPF / CNPJ"><input id="cli-email" placeholder="E-mail"><input id="cli-tel" placeholder="Telefone"><input id="cli-end" placeholder="Endereço Completo" class="full-width"></div><div style="margin-top:20px;"><button id="btn-salvar-cli" class="btn-primary full-width" onclick="salvarCliente()">SALVAR CLIENTE</button></div>
             </div>
         </div>
 
         <div id="tab-obras" class="hidden fade-in">
             <h2>Gestão de Obras</h2>
-            <div class="glass-card">
-                <h4 style="color:#888;">Iniciar Nova Obra</h4>
-                <div class="grid-form">
-                    <input id="ob-nome" placeholder="Nome da Obra">
-                    <select id="ob-cliente-select"><option value="">Selecione o Cliente...</option></select>
-                    <input id="ob-orc" placeholder="Orçamento (R$)" oninput="formatarMoeda(this)">
-                    <select id="ob-engenheiro"><option value="">Engenheiro Responsável...</option></select>
-                    <select id="ob-mestre"><option value="">Mestre de Obras...</option></select>
-                    <button class="btn-primary full-width" onclick="addObra()">CRIAR OBRA</button>
-                </div>
-            </div>
+            <div class="glass-card"><h4 style="color:#888;">Iniciar Nova Obra</h4><div class="grid-form"><input id="ob-nome" placeholder="Nome da Obra"><select id="ob-cliente-select"><option value="">Selecione o Cliente...</option></select><input id="ob-orc" placeholder="Orçamento (R$)" oninput="formatarMoeda(this)"><select id="ob-engenheiro"><option value="">Engenheiro Responsável...</option></select><select id="ob-mestre"><option value="">Mestre de Obras...</option></select><button class="btn-primary full-width" onclick="addObra()">CRIAR OBRA</button></div></div>
             <div id="lista-obras-cards" style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:20px;"></div>
         </div>
 
         <div id="tab-rh" class="hidden fade-in">
             <h2>Gestão de Pessoas</h2>
             <div id="rh-visao-geral">
-                <div style="display:flex; gap:20px; margin-bottom:20px;">
-                    <div class="glass-card" style="flex:1;"><h4>ATIVOS</h4><h2 id="rh-total-count-ativos">0</h2></div>
-                    <div class="glass-card" style="flex:1;"><h4>ARQUIVADOS</h4><h2 id="rh-total-count-arquivados">0</h2></div>
-                    <div class="glass-card" style="flex:1; cursor:pointer; border:1px dashed #444; display:flex; align-items:center; justify-content:center;" onclick="mostrarFormRH()"><h4 style="color:var(--primary);">+ NOVO CADASTRO</h4></div>
-                </div>
-                <div class="glass-card">
-                    <div id="rh-tabs" style="margin-bottom:15px;"><button class="tab-btn active" onclick="alternarVisaoRH('ativa')">Ativos</button><button class="tab-btn" onclick="alternarVisaoRH('arquivados')">Inativos</button></div>
-                    <input type="text" id="rh-busca" placeholder="🔍 Buscar..." onkeyup="filtrarFuncionarios()">
-                    <div id="rh-ativa-conteudo"><table><thead><tr><th>Nome</th><th>Cargo</th><th>Ações</th></tr></thead><tbody id="tb-rh-ativos"></tbody></table></div>
-                    <div id="rh-arquivados-conteudo" class="hidden"><table><thead><tr><th>Nome</th><th>Motivo</th><th>Data</th></tr></thead><tbody id="tb-rh-arquivados"></tbody></table></div>
-                </div>
+                <div style="display:flex; gap:20px; margin-bottom:20px;"><div class="glass-card" style="flex:1;"><h4>ATIVOS</h4><h2 id="rh-total-count-ativos">0</h2></div><div class="glass-card" style="flex:1;"><h4>ARQUIVADOS</h4><h2 id="rh-total-count-arquivados">0</h2></div><div class="glass-card" style="flex:1; cursor:pointer; border:1px dashed #444; display:flex; align-items:center; justify-content:center;" onclick="mostrarFormRH()"><h4 style="color:var(--primary);">+ NOVO CADASTRO</h4></div></div>
+                <div class="glass-card"><div id="rh-tabs" style="margin-bottom:15px;"><button class="tab-btn active" onclick="alternarVisaoRH('ativa')">Ativos</button><button class="tab-btn" onclick="alternarVisaoRH('arquivados')">Inativos</button></div><input type="text" id="rh-busca" placeholder="🔍 Buscar..." onkeyup="filtrarFuncionarios()"><div id="rh-ativa-conteudo"><table><thead><tr><th>Nome</th><th>Cargo</th><th>Ações</th></tr></thead><tbody id="tb-rh-ativos"></tbody></table></div><div id="rh-arquivados-conteudo" class="hidden"><table><thead><tr><th>Nome</th><th>Motivo</th><th>Data</th></tr></thead><tbody id="tb-rh-arquivados"></tbody></table></div></div>
             </div>
-            <div id="rh-formulario" class="hidden fade-in">
-                <div class="glass-card">
-                    <div style="display:flex; justify-content:space-between;"><h4>📝 Ficha de Admissão</h4><button onclick="voltarRH()" style="background:none; border:none; color:#888; cursor:pointer;">CANCELAR</button></div>
-                    <div class="grid-form" style="margin-top:20px;">
-                        <input id="rh-nome" placeholder="Nome Completo *" class="full-width" oninput="formatarNome(this)">
-                        <input id="rh-cpf" placeholder="CPF" oninput="formatarCPF(this)">
-                        <input id="rh-rg" placeholder="RG">
-                        <input id="rh-nis" placeholder="NIS/PIS" oninput="formatarNIS(this)">
-                        <div style="display:flex; flex-direction:column;"><label style="font-size:11px; color:#888;">Data de Nascimento</label><input id="rh-nasc" type="date"></div>
-                        <input id="rh-tel" placeholder="Telefone">
-                        <input id="rh-email" placeholder="E-mail" class="full-width">
-                        <input id="rh-end" placeholder="Endereço" class="full-width">
-                        <select id="rh-cargo-select" class="full-width"><option value="">Selecione o Cargo...</option></select>
-                        <div class="full-width"><label style="font-size:11px; color:#888;">Documentos (Múltiplos)</label><input type="file" id="rh-doc-inicial" multiple></div>
-                    </div>
-                    <button class="btn-primary" style="margin-top:20px;" onclick="addRhFull()">CONCLUIR CADASTRO</button>
-                </div>
-            </div>
+            <div id="rh-formulario" class="hidden fade-in"><div class="glass-card"><div style="display:flex; justify-content:space-between;"><h4>📝 Ficha de Admissão</h4><button onclick="voltarRH()" style="background:none; border:none; color:#888; cursor:pointer;">CANCELAR</button></div><div class="grid-form" style="margin-top:20px;"><input id="rh-nome" placeholder="Nome Completo *" class="full-width" oninput="formatarNome(this)"><input id="rh-cpf" placeholder="CPF" oninput="formatarCPF(this)"><input id="rh-rg" placeholder="RG"><input id="rh-nis" placeholder="NIS/PIS" oninput="formatarNIS(this)"><div style="display:flex; flex-direction:column;"><label style="font-size:11px; color:#888;">Data de Nascimento</label><input id="rh-nasc" type="date"></div><input id="rh-tel" placeholder="Telefone"><input id="rh-email" placeholder="E-mail" class="full-width"><input id="rh-end" placeholder="Endereço" class="full-width"><select id="rh-cargo-select" class="full-width"><option value="">Selecione o Cargo...</option></select><div class="full-width"><label style="font-size:11px; color:#888;">Documentos (Múltiplos)</label><input type="file" id="rh-doc-inicial" multiple></div></div><button class="btn-primary" style="margin-top:20px;" onclick="addRhFull()">CONCLUIR CADASTRO</button></div></div>
         </div>
 
-        <div id="tab-config" class="hidden fade-in">
-            <h2>Configurações de Acesso</h2>
-            <div class="glass-card">
-                <input id="cfg-user" placeholder="Login"><input id="cfg-pass" type="password" placeholder="Senha">
-                <select id="cfg-cargo"><option value="admin">Administrador</option><option value="gerente">Mestre de Obras</option><option value="rh">RH</option><option value="financeiro">Financeiro</option><option value="engenharia">Engenheiro</option></select>
-                <button class="btn-primary" onclick="salvarUsuario()">SALVAR USUÁRIO</button>
-                <table id="tb-users" style="margin-top:20px;"></table>
-            </div>
-        </div>
+        <div id="tab-config" class="hidden fade-in"><h2>Configurações de Acesso</h2><div class="glass-card"><input id="cfg-user" placeholder="Login"><input id="cfg-pass" type="password" placeholder="Senha"><select id="cfg-cargo"><option value="admin">Administrador</option><option value="gerente">Mestre de Obras</option><option value="rh">RH</option><option value="financeiro">Financeiro</option><option value="engenharia">Engenheiro</option></select><button class="btn-primary" onclick="salvarUsuario()">SALVAR USUÁRIO</button><table id="tb-users" style="margin-top:20px;"></table></div></div>
     </div>
 
-    <div id="modal-canteiro" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header"><h3 id="canteiro-titulo" style="color:var(--primary);">🚧 Canteiro</h3><button onclick="fecharModal('modal-canteiro')" style="background:none;border:none;color:white;cursor:pointer;">X</button></div>
-            <div class="modal-body">
-                <div style="flex:1; border-right:1px solid #333; padding-right:20px;">
-                    <h4 style="color:#888; margin-bottom:15px;">Chamada do Dia</h4>
-                    <div id="lista-chamada"></div> 
-                </div>
-                <div style="flex:1;">
-                    <h4 style="color:#888; margin-bottom:15px;">Histórico Recente</h4>
-                    <table id="tb-historico-ponto"></table>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    <div id="modal-canteiro" class="modal-overlay"><div class="modal-content"><div class="modal-header"><h3 id="canteiro-titulo" style="color:var(--primary);">🚧 Canteiro</h3><button onclick="fecharModal('modal-canteiro')" style="background:none;border:none;color:white;cursor:pointer;">X</button></div><div class="modal-body"><div style="flex:1; border-right:1px solid #333; padding-right:20px;"><h4 style="color:#888; margin-bottom:15px;">Chamada do Dia</h4><div id="lista-chamada"></div></div><div style="flex:1;"><h4 style="color:#888; margin-bottom:15px;">Histórico Recente</h4><table id="tb-historico-ponto"></table></div></div></div></div>
     <div id="modal-ficha" class="modal-overlay"><div class="modal-content"><div class="modal-header"><h3 id="modal-nome-func">Ficha</h3><button onclick="fecharModal('modal-ficha')" style="background:none;border:none;color:white;cursor:pointer;">X</button></div><div class="modal-body"><div id="lista-timeline" style="flex:1;"></div><div id="lista-docs" style="flex:1;"></div></div></div></div>
     <div id="modal-desligamento" class="modal-overlay"><div class="modal-content modal-small"><div class="modal-header"><h3>⚠️ Desligar</h3><button onclick="fecharModal('modal-desligamento')" style="background:none;border:none;color:white;cursor:pointer;">X</button></div><div class="modal-body" style="flex-direction:column;"><h2 id="deslig-nome"></h2><input id="deslig-motivo" placeholder="Motivo"><input id="deslig-obs" placeholder="Obs"><input id="deslig-pass" type="password" placeholder="Sua Senha ADMIN"><button class="btn-primary" onclick="confirmarDesligamento()">DEMITIR</button></div></div></div>
 
     <script>
         const { ipcRenderer } = require('electron');
-        let listaAtivos = []; let listaArquivados = []; let obraAtualId = null;
-        let clientesAtivos = []; let clientesInativos = [];
+        let listaAtivos = [], listaArquivados = [], obraAtualId = null;
+        let clientesAtivos = [], clientesInativos = [];
+        let listaEstoque = [];
+        let categoriaEstoqueAtual = 'TODOS';
 
         // MÁSCARAS
         function formatarMoeda(c){ let v=c.value.replace(/\D/g,''); v=(v/100).toFixed(2).toString().replace('.',','); v=v.replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.'); c.value=v; }
@@ -198,8 +181,14 @@
 
         async function nav(id) {
             document.querySelectorAll('.main-content > div').forEach(d => d.classList.add('hidden'));
-            document.getElementById('tab-'+id).classList.remove('hidden');
-            carregarTudo();
+            const aba = document.getElementById('tab-'+id);
+            if(aba) {
+                aba.classList.remove('hidden');
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                const btn = document.getElementById('btn-'+id);
+                if(btn) btn.classList.add('active');
+                carregarTudo();
+            }
         }
 
         async function carregarTudo() {
@@ -217,6 +206,14 @@
                 }).join('');
                 document.getElementById('lista-categorias').innerHTML = cats.map(c => `<span class="badge badge-pendente" style="margin-right:5px;">${c.nome}</span>`).join('');
 
+                // ESTOQUE (COM ÍCONES)
+                const produtos = await ipcRenderer.invoke('get-products');
+                listaEstoque = produtos;
+                document.getElementById('est-total-itens').innerText = produtos.length;
+                let valTotal = 0; produtos.forEach(p => valTotal += p.quantidade * p.valor_unitario);
+                document.getElementById('est-valor-total').innerText = `R$ ${valTotal.toFixed(2)}`;
+                filtrarEstoque();
+
                 // RH
                 const func = await ipcRenderer.invoke('get-employees');
                 listaAtivos = func.filter(f => f.status === 'ATIVO');
@@ -225,7 +222,7 @@
                 document.getElementById('rh-total-count-arquivados').innerText = listaArquivados.length;
                 filtrarFuncionarios(); renderizarArquivados();
 
-                // CLIENTES (V30)
+                // CLIENTES
                 const todosClientes = await ipcRenderer.invoke('get-clients');
                 clientesAtivos = todosClientes.filter(c => !c.status || c.status === 'ATIVO');
                 clientesInativos = todosClientes.filter(c => c.status === 'INATIVO');
@@ -239,15 +236,7 @@
                 const users = await ipcRenderer.invoke('get-system-users');
                 document.getElementById('ob-engenheiro').innerHTML = '<option value="">Engenheiro...</option>' + users.filter(u=>u.cargo==='engenharia').map(u=>`<option value="${u.id}">${u.username}</option>`).join('');
                 document.getElementById('ob-mestre').innerHTML = '<option value="">Mestre...</option>' + users.filter(u=>u.cargo==='gerente').map(u=>`<option value="${u.id}">${u.username}</option>`).join('');
-                
-                document.getElementById('lista-obras-cards').innerHTML = obras.map(o => `
-                    <div class="glass-card" style="border-left: 5px solid var(--primary); cursor:pointer;" onclick="abrirCanteiro(${o.id}, '${o.nome_obra}')">
-                        <h3 style="color:white;">${o.nome_obra}</h3>
-                        <p style="font-size:12px; color:#888; margin:5px 0;">Cliente: ${o.cliente_nome || 'N/D'}</p>
-                        <p style="font-size:11px; color:var(--primary);">Mestre: ${o.mestre_nome || 'N/D'}</p>
-                        <button class="btn-primary" style="margin-top:10px; background:#222; color:var(--primary); border:1px solid var(--primary);">ACESSAR CANTEIRO</button>
-                    </div>
-                `).join('');
+                document.getElementById('lista-obras-cards').innerHTML = obras.map(o => `<div class="glass-card" style="border-left: 5px solid var(--primary); cursor:pointer;" onclick="abrirCanteiro(${o.id}, '${o.nome_obra}')"><h3 style="color:white;">${o.nome_obra}</h3><p style="font-size:12px; color:#888; margin:5px 0;">Cliente: ${o.cliente_nome || 'N/D'}</p><p style="font-size:11px; color:var(--primary);">Mestre: ${o.mestre_nome || 'N/D'}</p><button class="btn-primary" style="margin-top:10px; background:#222; color:var(--primary); border:1px solid var(--primary);">ACESSAR CANTEIRO</button></div>`).join('');
                 
                 // CARGOS E USUARIOS
                 carregarCargos();
@@ -257,59 +246,60 @@
             } catch (e) { console.error("Erro ao carregar dados:", e); }
         }
 
-        // --- FUNÇÕES DE CLIENTES ---
-        function renderizarClientes() {
-            const termo = document.getElementById('cli-busca').value.toLowerCase();
-            document.getElementById('tb-clientes-ativos').innerHTML = clientesAtivos
-                .filter(c => c.nome.toLowerCase().includes(termo))
-                .map(c => `<tr><td style="font-weight:bold; color:white;">${c.nome}</td><td>${c.documento || '-'}</td><td>${c.telefone || '-'}</td><td><button class="action-icon" onclick="editarCliente(${c.id})" style="border:none; background:none; color:var(--primary);">✎</button><button class="action-icon" onclick="arquivarCliente(${c.id}, '${c.nome}')" style="border:none; background:none; color:#ff5252;">🗑️</button></td></tr>`).join('');
-            document.getElementById('tb-clientes-inativos').innerHTML = clientesInativos.map(c => `<tr><td style="opacity:0.6;">${c.nome}</td><td>${c.documento}</td><td><span class="badge badge-atrasado">INATIVO</span></td></tr>`).join('');
+        // --- FUNÇÕES DE ALMOXARIFADO (V31.2) ---
+        function novoProduto() { 
+            document.getElementById('pd-id').value = ''; document.getElementById('pd-nome').value = ''; document.getElementById('pd-cat').value = 'MATERIAIS'; document.getElementById('pd-qtd').value = ''; document.getElementById('pd-val').value = '';
+            document.getElementById('titulo-form-est').innerText = 'Cadastro de Material';
+            document.getElementById('est-cards').classList.add('hidden'); document.getElementById('est-lista').classList.add('hidden'); document.getElementById('est-form').classList.remove('hidden'); 
         }
-        function filtrarClientes() { renderizarClientes(); }
-        function alternarVisaoClientes(modo) {
-            if(modo === 'ativos') { document.getElementById('lista-cli-ativos').classList.remove('hidden'); document.getElementById('lista-cli-arquivados').classList.add('hidden'); document.getElementById('btn-cli-ativos').classList.add('active'); document.getElementById('btn-cli-arquivados').classList.remove('active'); } 
-            else { document.getElementById('lista-cli-ativos').classList.add('hidden'); document.getElementById('lista-cli-arquivados').classList.remove('hidden'); document.getElementById('btn-cli-ativos').classList.remove('active'); document.getElementById('btn-cli-arquivados').classList.add('active'); }
+        function voltarEstoque() { document.getElementById('est-form').classList.add('hidden'); document.getElementById('est-cards').classList.remove('hidden'); document.getElementById('est-lista').classList.remove('hidden'); }
+        async function salvarProduto() {
+            const d = { id: document.getElementById('pd-id').value, nome: document.getElementById('pd-nome').value, cat: document.getElementById('pd-cat').value, qtd: document.getElementById('pd-qtd').value, val: document.getElementById('pd-val').value.replace(/\./g,'').replace(',','.') };
+            if(!d.nome) return alert('Nome do produto é obrigatório.');
+            await ipcRenderer.invoke('save-product', d);
+            voltarEstoque(); carregarTudo();
         }
-        
-        // --- CONTROLE DE VISIBILIDADE DO FORMULÁRIO (NOVO) ---
-        function novoCliente() {
-            limparFormCliente();
-            document.getElementById('cli-resumo-cards').classList.add('hidden');
-            document.getElementById('cli-visao-geral').classList.add('hidden');
-            document.getElementById('cli-formulario').classList.remove('hidden');
-        }
-        function voltarClientes() {
-            document.getElementById('cli-formulario').classList.add('hidden');
-            document.getElementById('cli-resumo-cards').classList.remove('hidden');
-            document.getElementById('cli-visao-geral').classList.remove('hidden');
-        }
-
-        async function salvarCliente() {
-            const d = { id: document.getElementById('cli-id').value, nome: document.getElementById('cli-nome').value, doc: document.getElementById('cli-doc').value, email: document.getElementById('cli-email').value, tel: document.getElementById('cli-tel').value, end: document.getElementById('cli-end').value };
-            if(!d.nome) return alert("Nome é obrigatório!");
-            await ipcRenderer.invoke('save-client', d);
-            voltarClientes(); 
-            carregarTudo();
-        }
-        function editarCliente(id) {
-            const c = clientesAtivos.find(x => x.id === id);
-            if(c) { 
-                document.getElementById('cli-id').value = c.id; 
-                document.getElementById('cli-nome').value = c.nome; 
-                document.getElementById('cli-doc').value = c.documento; 
-                document.getElementById('cli-email').value = c.email; 
-                document.getElementById('cli-tel').value = c.telefone; 
-                document.getElementById('cli-end').value = c.endereco; 
-                document.getElementById('btn-salvar-cli').innerText = "SALVAR ALTERAÇÕES"; 
-                document.getElementById('titulo-form-cli').innerText = "Editando: " + c.nome; 
-                
-                // ESCONDE A LISTA E MOSTRA O FORMULÁRIO
-                document.getElementById('cli-resumo-cards').classList.add('hidden');
-                document.getElementById('cli-visao-geral').classList.add('hidden');
-                document.getElementById('cli-formulario').classList.remove('hidden');
-                document.getElementById('cli-nome').focus(); 
+        function editarProduto(id) {
+            const p = listaEstoque.find(x => x.id === id);
+            if(p) {
+                document.getElementById('pd-id').value = p.id; document.getElementById('pd-nome').value = p.nome; document.getElementById('pd-cat').value = p.categoria; document.getElementById('pd-qtd').value = p.quantidade; document.getElementById('pd-val').value = parseFloat(p.valor_unitario).toFixed(2).replace('.',',');
+                document.getElementById('titulo-form-est').innerText = 'Editando: ' + p.nome;
+                document.getElementById('est-cards').classList.add('hidden'); document.getElementById('est-lista').classList.add('hidden'); document.getElementById('est-form').classList.remove('hidden'); 
             }
         }
+        async function deletarProduto(id) { if(confirm('Excluir material do estoque?')) { await ipcRenderer.invoke('delete-product', id); carregarTudo(); } }
+        
+        function filtrarCategoria(cat) {
+            categoriaEstoqueAtual = cat;
+            document.querySelectorAll('.cat-folder').forEach(b => b.classList.remove('active'));
+            const mapBtn = {'TODOS':'tab-cat-todos', 'MATERIAIS':'tab-cat-mat', 'FERRAMENTAS':'tab-cat-fer', 'EPI':'tab-cat-epi', 'LIMPEZA':'tab-cat-limp', 'DIVERSOS':'tab-cat-div'};
+            const activeId = mapBtn[cat] || 'tab-cat-todos';
+            document.getElementById(activeId).classList.add('active');
+            filtrarEstoque();
+        }
+
+        function filtrarEstoque() { 
+            const termo = document.getElementById('est-busca').value.toLowerCase();
+            const filtrados = listaEstoque.filter(p => {
+                const matchTexto = p.nome.toLowerCase().includes(termo);
+                const matchCat = categoriaEstoqueAtual === 'TODOS' ? true : (p.categoria === categoriaEstoqueAtual);
+                return matchTexto && matchCat;
+            });
+            
+            document.getElementById('tb-estoque').innerHTML = filtrados.map(p => {
+                const total = p.quantidade * p.valor_unitario;
+                return `<tr><td><b>${p.nome}</b></td><td>${p.categoria || '-'}</td><td>${p.quantidade}</td><td>R$ ${parseFloat(p.valor_unitario).toFixed(2)}</td><td style="color:var(--primary);">R$ ${total.toFixed(2)}</td><td><button class="action-icon" onclick="editarProduto(${p.id})" style="border:none; background:none; color:var(--primary);">✎</button><button class="action-icon" onclick="deletarProduto(${p.id})" style="border:none; background:none; color:#ff5252;">🗑️</button></td></tr>`;
+            }).join('');
+        }
+
+        // --- CLIENTES ---
+        function renderizarClientes() { const termo = document.getElementById('cli-busca').value.toLowerCase(); document.getElementById('tb-clientes-ativos').innerHTML = clientesAtivos.filter(c => c.nome.toLowerCase().includes(termo)).map(c => `<tr><td style="font-weight:bold; color:white;">${c.nome}</td><td>${c.documento || '-'}</td><td>${c.telefone || '-'}</td><td><button class="action-icon" onclick="editarCliente(${c.id})" style="border:none; background:none; color:var(--primary);">✎</button><button class="action-icon" onclick="arquivarCliente(${c.id}, '${c.nome}')" style="border:none; background:none; color:#ff5252;">🗑️</button></td></tr>`).join(''); document.getElementById('tb-clientes-inativos').innerHTML = clientesInativos.map(c => `<tr><td style="opacity:0.6;">${c.nome}</td><td>${c.documento}</td><td><span class="badge badge-atrasado">INATIVO</span></td></tr>`).join(''); }
+        function filtrarClientes() { renderizarClientes(); }
+        function alternarVisaoClientes(modo) { if(modo === 'ativos') { document.getElementById('lista-cli-ativos').classList.remove('hidden'); document.getElementById('lista-cli-arquivados').classList.add('hidden'); document.getElementById('btn-cli-ativos').classList.add('active'); document.getElementById('btn-cli-arquivados').classList.remove('active'); } else { document.getElementById('lista-cli-ativos').classList.add('hidden'); document.getElementById('lista-cli-arquivados').classList.remove('hidden'); document.getElementById('btn-cli-ativos').classList.remove('active'); document.getElementById('btn-cli-arquivados').classList.add('active'); } }
+        function novoCliente() { limparFormCliente(); document.getElementById('cli-resumo-cards').classList.add('hidden'); document.getElementById('cli-visao-geral').classList.add('hidden'); document.getElementById('cli-formulario').classList.remove('hidden'); }
+        function voltarClientes() { document.getElementById('cli-formulario').classList.add('hidden'); document.getElementById('cli-resumo-cards').classList.remove('hidden'); document.getElementById('cli-visao-geral').classList.remove('hidden'); }
+        async function salvarCliente() { const d = { id: document.getElementById('cli-id').value, nome: document.getElementById('cli-nome').value, doc: document.getElementById('cli-doc').value, email: document.getElementById('cli-email').value, tel: document.getElementById('cli-tel').value, end: document.getElementById('cli-end').value }; if(!d.nome) return alert("Nome é obrigatório!"); await ipcRenderer.invoke('save-client', d); voltarClientes(); carregarTudo(); }
+        function editarCliente(id) { const c = clientesAtivos.find(x => x.id === id); if(c) { document.getElementById('cli-id').value = c.id; document.getElementById('cli-nome').value = c.nome; document.getElementById('cli-doc').value = c.documento; document.getElementById('cli-email').value = c.email; document.getElementById('cli-tel').value = c.telefone; document.getElementById('cli-end').value = c.endereco; document.getElementById('btn-salvar-cli').innerText = "SALVAR ALTERAÇÕES"; document.getElementById('titulo-form-cli').innerText = "Editando: " + c.nome; document.getElementById('cli-resumo-cards').classList.add('hidden'); document.getElementById('cli-visao-geral').classList.add('hidden'); document.getElementById('cli-formulario').classList.remove('hidden'); document.getElementById('cli-nome').focus(); } }
         async function arquivarCliente(id, nome) { if(confirm(`Deseja arquivar o cliente "${nome}"?`)) { await ipcRenderer.invoke('archive-client', id); carregarTudo(); } }
         function limparFormCliente() { document.getElementById('cli-id').value = ''; document.getElementById('cli-nome').value = ''; document.getElementById('cli-doc').value = ''; document.getElementById('cli-email').value = ''; document.getElementById('cli-tel').value = ''; document.getElementById('cli-end').value = ''; document.getElementById('btn-salvar-cli').innerText = "SALVAR CLIENTE"; document.getElementById('titulo-form-cli').innerText = "Novo Cliente"; }
 
