@@ -1,4 +1,4 @@
-/* ARQUIVO: main.js (V29 - SISTEMA COMPLETO: RH + FINANCEIRO + OBRAS + CLIENTES + PONTO) */
+/* ARQUIVO: main.js (V30 - COMPLETO COM GESTÃO DE CLIENTES + PONTO + RH) */
 const { app, BrowserWindow, ipcMain } = require('electron');
 const { Client } = require('pg');
 
@@ -34,36 +34,39 @@ async function configurarBanco() {
     const client = new Client(dbConfig);
     try {
         await client.connect();
-        console.log("--- SINCRONIZANDO E REPARANDO BANCO (V29) ---");
+        console.log("--- SINCRONIZANDO E REPARANDO BANCO (V30) ---");
         
         // 1. TABELAS BASE
         await client.query(`CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, username TEXT UNIQUE, password_hash TEXT, cargo TEXT)`);
-        await client.query(`CREATE TABLE IF NOT EXISTS clients (id SERIAL PRIMARY KEY, nome TEXT, documento TEXT, email TEXT, telefone TEXT, endereco TEXT, data_cadastro TIMESTAMP DEFAULT NOW())`);
         await client.query(`CREATE TABLE IF NOT EXISTS finance_categories (id SERIAL PRIMARY KEY, nome TEXT UNIQUE, tipo TEXT)`);
         
-        // 2. RH (GARANTIA DE COLUNAS)
+        // 2. CLIENTES (ATUALIZADO V30 - COM STATUS)
+        await client.query(`CREATE TABLE IF NOT EXISTS clients (id SERIAL PRIMARY KEY, nome TEXT, documento TEXT, email TEXT, telefone TEXT, endereco TEXT, data_cadastro TIMESTAMP DEFAULT NOW())`);
+        try { await client.query("ALTER TABLE clients ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'ATIVO'"); } catch(e){}
+
+        // 3. RH (GARANTIA DE COLUNAS)
         await client.query(`CREATE TABLE IF NOT EXISTS employees (id SERIAL PRIMARY KEY, nome TEXT, cargo TEXT, salario NUMERIC, status TEXT DEFAULT 'ATIVO')`);
         const rhCols = ["cpf", "rg", "nis", "data_nascimento", "endereco", "email", "telefone", "admissao_data", "desligamento_data", "desligamento_motivo"];
         for(let col of rhCols) { try { await client.query(`ALTER TABLE employees ADD COLUMN IF NOT EXISTS ${col} TEXT`); } catch(e){} }
 
-        // 3. FINANCEIRO (REPARO)
+        // 4. FINANCEIRO (REPARO)
         await client.query(`CREATE TABLE IF NOT EXISTS finance_entries (id SERIAL PRIMARY KEY, tipo TEXT, descricao TEXT, valor NUMERIC)`);
         try { await client.query("ALTER TABLE finance_entries ADD COLUMN IF NOT EXISTS categoria_id INTEGER REFERENCES finance_categories(id)"); } catch(e){}
         try { await client.query("ALTER TABLE finance_entries ADD COLUMN IF NOT EXISTS data_vencimento DATE"); } catch(e){}
         try { await client.query("ALTER TABLE finance_entries ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'PENDENTE'"); } catch(e){}
         try { await client.query("ALTER TABLE finance_entries ADD COLUMN IF NOT EXISTS data_pagamento DATE"); } catch(e){}
 
-        // 4. OBRAS (REPARO)
+        // 5. OBRAS (REPARO)
         await client.query(`CREATE TABLE IF NOT EXISTS projects (id SERIAL PRIMARY KEY, nome_obra TEXT, status TEXT DEFAULT 'ATIVA')`);
         try { await client.query("ALTER TABLE projects ADD COLUMN IF NOT EXISTS cliente_id INTEGER REFERENCES clients(id)"); } catch(e){}
         try { await client.query("ALTER TABLE projects ADD COLUMN IF NOT EXISTS engenheiro_id INTEGER REFERENCES users(id)"); } catch(e){}
         try { await client.query("ALTER TABLE projects ADD COLUMN IF NOT EXISTS mestre_id INTEGER REFERENCES users(id)"); } catch(e){}
         try { await client.query("ALTER TABLE projects ADD COLUMN IF NOT EXISTS orcamento NUMERIC DEFAULT 0"); } catch(e){}
 
-        // 5. PONTO (NOVO)
+        // 6. PONTO (NOVO)
         await client.query(`CREATE TABLE IF NOT EXISTS project_attendance (id SERIAL PRIMARY KEY, project_id INTEGER, employee_id INTEGER REFERENCES employees(id), data_registro DATE DEFAULT CURRENT_DATE, status TEXT, obs TEXT)`);
 
-        // 6. OUTROS
+        // 7. OUTROS
         await client.query(`CREATE TABLE IF NOT EXISTS employee_docs (id SERIAL PRIMARY KEY, employee_id INTEGER REFERENCES employees(id) ON DELETE CASCADE, nome_arquivo TEXT, tipo_arquivo TEXT, conteudo TEXT)`);
         await client.query(`CREATE TABLE IF NOT EXISTS system_logs (id SERIAL PRIMARY KEY, usuario TEXT, acao TEXT, detalhes TEXT, data_hora TIMESTAMP DEFAULT NOW())`);
         await client.query(`CREATE TABLE IF NOT EXISTS employee_history (id SERIAL PRIMARY KEY, employee_id INTEGER REFERENCES employees(id) ON DELETE CASCADE, tipo TEXT, data_evento DATE DEFAULT CURRENT_DATE, descricao TEXT)`);
@@ -75,13 +78,13 @@ async function configurarBanco() {
         if (checkAdmin.rows.length === 0) await client.query("INSERT INTO users (username, password_hash, cargo) VALUES ('admin', 'admin', 'admin')");
         
         await client.end();
-        console.log("✅ BANCO DE DADOS ATUALIZADO (V29).");
+        console.log("✅ BANCO DE DADOS ATUALIZADO (V30).");
     } catch (err) { console.log("Erro Banco:", err.message); }
 }
 configurarBanco();
 
 function createWindow() {
-    win = new BrowserWindow({ width: 1300, height: 950, title: 'OneSys Construtora v29', webPreferences: { nodeIntegration: true, contextIsolation: false } });
+    win = new BrowserWindow({ width: 1300, height: 950, title: 'OneSys Construtora v30', webPreferences: { nodeIntegration: true, contextIsolation: false } });
     win.setMenuBarVisibility(false);
     win.loadFile('login.html');
 }
@@ -91,9 +94,25 @@ app.whenReady().then(createWindow);
 // HANDLERS (AÇÕES DO SISTEMA)
 // ==========================================
 
-// --- CLIENTES ---
+// --- CLIENTES (ATUALIZADO V30) ---
 ipcMain.handle('get-clients', async () => await dbQuery("SELECT * FROM clients ORDER BY nome ASC"));
-ipcMain.handle('add-client', async (e, d) => { await dbQuery(`INSERT INTO clients (nome, documento, email, telefone, endereco) VALUES ($1, $2, $3, $4, $5)`, [d.nome, d.doc, d.email, d.tel, d.end]); return true; });
+
+ipcMain.handle('save-client', async (e, d) => {
+    if (d.id) {
+        // EDIÇÃO
+        await dbQuery("UPDATE clients SET nome=$1, documento=$2, email=$3, telefone=$4, endereco=$5 WHERE id=$6", [d.nome, d.doc, d.email, d.tel, d.end, d.id]);
+    } else {
+        // CRIAÇÃO (COM STATUS ATIVO)
+        await dbQuery("INSERT INTO clients (nome, documento, email, telefone, endereco, status) VALUES ($1, $2, $3, $4, $5, 'ATIVO')", [d.nome, d.doc, d.email, d.tel, d.end]);
+    }
+    return true;
+});
+
+ipcMain.handle('archive-client', async (e, id) => {
+    // ARQUIVAR (NÃO APAGA)
+    await dbQuery("UPDATE clients SET status='INATIVO' WHERE id=$1", [id]);
+    return true;
+});
 
 // --- OBRAS ---
 ipcMain.handle('get-projects', async () => {
