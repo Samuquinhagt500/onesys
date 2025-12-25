@@ -1,4 +1,4 @@
-/* ARQUIVO: style.css (V31.3 - MERGE SEGURO: SEU ESTILO + NOVOS ÍCONES) */
+/* ARQUIVO: style.css (V34 - MODAL AJUSTADO + ÍCONES ALINHADOS) */
 :root {
     --primary: #00E676; /* Verde Neon */
     --bg-body: #050505;
@@ -13,6 +13,12 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; outline: none; font-family: 'Segoe UI', sans-serif; }
+
+/* BARRA DE ROLAGEM MODERNA */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #0a0a0a; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #555; }
 
 body { height: 100vh; width: 100vw; background-color: var(--bg-body); color: #fff; display: flex; overflow: hidden; }
 
@@ -35,10 +41,27 @@ input:focus, select:focus { border-color: var(--primary); }
 .btn-primary { background: var(--primary); color: #000; font-weight: bold; border: none; cursor: pointer; text-transform: uppercase; font-size: 12px; letter-spacing: 1px; }
 .btn-primary:hover { transform: scale(1.02); background: #00C853; }
 
-/* TABELAS */
+/* TABELAS E ÍCONES DE AÇÃO (CORREÇÃO V34) */
 table { width: 100%; border-collapse: collapse; margin-top: 20px; }
 th { text-align: left; color: #666; padding: 12px; border-bottom: 1px solid #222; font-size: 12px; text-transform: uppercase; }
-td { padding: 15px; border-bottom: 1px solid #1a1a1a; font-size: 14px; }
+td { padding: 15px; border-bottom: 1px solid #1a1a1a; font-size: 14px; vertical-align: middle; }
+
+/* Correção dos botões de ação para ficarem lado a lado */
+.action-icon { 
+    cursor: pointer; 
+    margin-right: 8px; /* Espaço entre os ícones */
+    font-size: 20px; 
+    color: #888; 
+    transition: 0.2s; 
+    background: transparent; 
+    border: none; 
+    padding: 5px; /* Área de clique melhor */
+    border-radius: 4px;
+    display: inline-flex; /* Garante alinhamento */
+    align-items: center;
+    justify-content: center;
+}
+.action-icon:hover { color: white; background: rgba(255,255,255,0.1); transform: scale(1.1); }
 
 /* UTILITÁRIOS */
 .hidden { display: none; }
@@ -47,14 +70,46 @@ td { padding: 15px; border-bottom: 1px solid #1a1a1a; font-size: 14px; }
 .tab-btn { background: none; border: none; color: #888; padding: 10px 20px; cursor: pointer; border-bottom: 2px solid transparent; margin-right: 5px; }
 .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: bold; }
 
-/* MODAIS */
+/* --- MODAIS (AJUSTADOS V34) --- */
 .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(5px); }
-.modal-content { background: #111; border: 1px solid #333; padding: 0; border-radius: 15px; width: 900px; height: 85vh; display: flex; flex-direction: column; box-shadow: 0 0 50px rgba(0,255,118,0.1); overflow: hidden; }
-.modal-small { width: 450px; height: auto; padding: 30px; border-color: #ff5252; }
-.modal-header { padding: 20px 30px; background: #161616; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
-.modal-body { padding: 30px; overflow-y: auto; display: flex; gap: 30px; height: 100%; }
 
-/* ESTILOS ESPECÍFICOS DO PONTO (BASE V29) */
+.modal-content { 
+    background: #111; 
+    border: 1px solid #333; 
+    padding: 0; 
+    border-radius: 15px; 
+    width: 900px; 
+    height: 85vh; 
+    display: flex; 
+    flex-direction: column; 
+    box-shadow: 0 0 50px rgba(0,255,118,0.1); 
+    overflow: hidden; 
+}
+
+.modal-header { padding: 15px 25px; background: #161616; border-bottom: 1px solid #222; display: flex; justify-content: space-between; align-items: center; }
+.modal-body { padding: 25px; overflow-y: auto; display: flex; gap: 30px; height: 100%; }
+
+/* MODAL PEQUENO (CORREÇÃO DE ALTURA E PROPORÇÃO) */
+.modal-small { 
+    width: 420px; 
+    height: auto; 
+    max-height: 90vh; /* Nunca ultrapassa a altura da tela */
+    border-color: #ff5252;
+    overflow-y: auto; /* Cria barra de rolagem se o conteúdo for grande */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Diminui o tamanho do nome do funcionário no modal de desligamento */
+#deslig-nome {
+    font-size: 18px !important; 
+    margin-bottom: 15px;
+    color: var(--primary);
+    line-height: 1.4;
+    font-weight: bold;
+}
+
+/* ESTILOS ESPECÍFICOS DO PONTO */
 .ponto-card { display: flex; justify-content: space-between; align-items: center; background: #1a1a1a; padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #333; transition: 0.2s; }
 .ponto-card:hover { border-color: var(--primary); transform: translateX(5px); }
 .ponto-info div:first-child { font-weight: bold; color: white; font-size: 15px; }
@@ -65,48 +120,89 @@ td { padding: 15px; border-bottom: 1px solid #1a1a1a; font-size: 14px; }
 .btn-falta { background: rgba(255, 82, 82, 0.1); color: #FF5252; border: 1px solid #FF5252; }
 .btn-falta:hover { background: #FF5252; color: #fff; }
 
-.badge { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; text-transform: uppercase; }
-.badge-pago { background: var(--primary); color: #000; }
-.badge-pendente { background: #FFC107; color: #000; }
-.badge-atrasado { background: #FF5252; color: #fff; }
-.category-list li { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #222; }
-.action-icon { cursor: pointer; margin-left: 10px; font-size: 18px; color: #888; transition: 0.2s; }
-.action-icon:hover { color: white; transform: scale(1.2); }
-
-/* --- NOVO: ÍCONES DE CATEGORIA (ESTILO PASTA V31) --- */
-/* Adicionado no final para garantir prioridade e organização */
-
 .cat-container { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 20px; }
+.cat-folder { flex: 1; min-width: 110px; height: 90px; background: #111; border: 1px solid #333; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #666; cursor: pointer; transition: 0.2s; text-align: center; }
+.cat-folder:hover { border-color: var(--primary); color: white; transform: translateY(-3px); }
+.cat-folder.active { background: rgba(0, 230, 118, 0.05); border-color: var(--primary); color: var(--primary); box-shadow: 0 4px 15px rgba(0, 230, 118, 0.1); }
+.cat-folder span.material-icons-round { font-size: 32px; margin-bottom: 8px; }
+.cat-folder small { font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
 
-.cat-folder {
-    flex: 1; min-width: 110px; height: 90px;
-    background: #111; border: 1px solid #333; border-radius: 12px;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    color: #666; cursor: pointer; transition: 0.2s;
-    text-align: center;
+/* --- TIMELINE DA FICHA (NOVO V35) --- */
+.timeline-container {
+    position: relative;
+    padding-left: 20px;
+    border-left: 2px solid #333; /* A linha vertical */
+    margin-left: 10px;
+    margin-top: 10px;
 }
 
-.cat-folder:hover { 
-    border-color: var(--primary); 
-    color: white; 
-    transform: translateY(-3px); 
+.timeline-item {
+    position: relative;
+    margin-bottom: 25px;
+    padding-left: 20px;
 }
 
-.cat-folder.active { 
-    background: rgba(0, 230, 118, 0.05); 
-    border-color: var(--primary); 
-    color: var(--primary); 
-    box-shadow: 0 4px 15px rgba(0, 230, 118, 0.1);
+/* A bolinha neon na linha */
+.timeline-dot {
+    position: absolute;
+    left: -27px;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    background: var(--primary);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0, 230, 118, 0.5);
+    border: 2px solid #000;
 }
 
-.cat-folder span.material-icons-round { 
-    font-size: 32px; 
-    margin-bottom: 8px; 
+/* O cartão de conteúdo */
+.timeline-content {
+    background: #1a1a1a;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    transition: 0.2s;
 }
 
-.cat-folder small { 
-    font-size: 11px; 
-    font-weight: bold; 
-    text-transform: uppercase; 
-    letter-spacing: 0.5px; 
+.timeline-content:hover {
+    border-color: #444;
+    transform: translateX(3px);
 }
+
+.t-date {
+    font-size: 11px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+    display: block;
+    font-weight: bold;
+}
+
+.t-title {
+    color: #fff;
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.t-desc {
+    color: #bbb;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+/* Área de Documentos */
+.doc-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #1a1a1a;
+    padding: 10px;
+    border: 1px dashed #444;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    font-size: 13px;
+    color: #ccc;
+}
+.doc-card span { color: var(--primary); font-size: 18px; }
