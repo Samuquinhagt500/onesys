@@ -21,6 +21,7 @@
     </div>
 
     <div class="main-content">
+        
         <div id="tab-dash" class="hidden fade-in">
             <h2>Visão Geral</h2>
             <div class="glass-card"><h4>Saldo Disponível</h4><h1 id="dash-saldo" style="font-size:48px; color:var(--primary);">R$ 0,00</h1></div>
@@ -192,57 +193,35 @@
                 </div>
 
                 <div id="mbody-est" class="hidden fade-in" style="height: 100%;">
-    
-    <div class="cat-container" style="justify-content: center; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 20px;">
-        <div class="cat-folder active" id="m-cat-todos" onclick="filtrarCategoriaObra('TODOS')">
-            <span class="material-icons-round">inventory_2</span><small>Geral</small>
-        </div>
-        <div class="cat-folder" id="m-cat-mat" onclick="filtrarCategoriaObra('MATERIAIS')">
-            <span class="material-icons-round">foundation</span><small>Materiais</small>
-        </div>
-        <div class="cat-folder" id="m-cat-fer" onclick="filtrarCategoriaObra('FERRAMENTAS')">
-            <span class="material-icons-round">handyman</span><small>Ferramentas</small>
-        </div>
-        <div class="cat-folder" id="m-cat-epi" onclick="filtrarCategoriaObra('EPI')">
-            <span class="material-icons-round">engineering</span><small>EPIs</small>
-        </div>
-        <div class="cat-folder" id="m-cat-limp" onclick="filtrarCategoriaObra('LIMPEZA')">
-            <span class="material-icons-round">cleaning_services</span><small>Limpeza</small>
-        </div>
-        <div class="cat-folder" id="m-cat-div" onclick="filtrarCategoriaObra('DIVERSOS')">
-            <span class="material-icons-round">category</span><small>Diversos</small>
-        </div>
-    </div>
+                    <div class="cat-container" style="justify-content: center; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 20px;">
+                        <div class="cat-folder active" id="m-cat-todos" onclick="filtrarCategoriaObra('TODOS')"><span class="material-icons-round">inventory_2</span><small>Geral</small></div>
+                        <div class="cat-folder" id="m-cat-mat" onclick="filtrarCategoriaObra('MATERIAIS')"><span class="material-icons-round">foundation</span><small>Materiais</small></div>
+                        <div class="cat-folder" id="m-cat-fer" onclick="filtrarCategoriaObra('FERRAMENTAS')"><span class="material-icons-round">handyman</span><small>Ferramentas</small></div>
+                        <div class="cat-folder" id="m-cat-epi" onclick="filtrarCategoriaObra('EPI')"><span class="material-icons-round">engineering</span><small>EPIs</small></div>
+                        <div class="cat-folder" id="m-cat-limp" onclick="filtrarCategoriaObra('LIMPEZA')"><span class="material-icons-round">cleaning_services</span><small>Limpeza</small></div>
+                        <div class="cat-folder" id="m-cat-div" onclick="filtrarCategoriaObra('DIVERSOS')"><span class="material-icons-round">category</span><small>Diversos</small></div>
+                    </div>
 
-    <div style="display: flex; gap: 20px; height: calc(100% - 130px);"> <div style="flex:2; overflow-y: auto;">
-            <h4 style="color:var(--primary); margin-bottom:15px;">📦 Materiais Disponíveis na Obra</h4>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Material</th>
-                        <th>Categoria</th> <th>Qtd</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody id="tb-materiais-obra">
-                    </tbody>
-            </table>
-        </div>
-
-        <div style="flex:1;">
-            <div style="background: #161616; padding: 20px; border-radius: 12px; border: 1px solid #333;">
-                <h4 style="color:#888; margin-bottom:15px;">📝 Registrar Consumo</h4>
-                <label style="font-size:11px; color:#666;">O que foi usado?</label>
-                <select id="m-uso-mat" style="margin-bottom:15px;"><option value="">Selecione...</option></select>
-                
-                <label style="font-size:11px; color:#666;">Quantidade</label>
-                <input type="number" id="m-uso-qtd" placeholder="Qtd usada">
-                
-                <button class="btn-primary" onclick="registrarUsoMaterial()">BAIXAR DO ESTOQUE</button>
-            </div>
-        </div>
-    </div>
-</div>
+                    <div style="display: flex; gap: 20px; height: calc(100% - 130px);"> 
+                        <div style="flex:2; overflow-y: auto;">
+                            <h4 style="color:var(--primary); margin-bottom:15px;">📦 Materiais Disponíveis na Obra</h4>
+                            <table>
+                                <thead><tr><th>Material</th><th>Categoria</th><th>Qtd</th><th>Ações</th></tr></thead>
+                                <tbody id="tb-materiais-obra"></tbody>
+                            </table>
+                        </div>
+                        <div style="flex:1;">
+                            <div style="background: #161616; padding: 20px; border-radius: 12px; border: 1px solid #333;">
+                                <h4 style="color:#888; margin-bottom:15px;">📝 Registrar Consumo</h4>
+                                <label style="font-size:11px; color:#666;">O que foi usado?</label>
+                                <select id="m-uso-mat" style="margin-bottom:15px;"><option value="">Selecione...</option></select>
+                                <label style="font-size:11px; color:#666;">Quantidade</label>
+                                <input type="number" id="m-uso-qtd" placeholder="Qtd usada">
+                                <button class="btn-primary" onclick="registrarUsoMaterial()">BAIXAR DO ESTOQUE</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <div id="mbody-fin" class="hidden fade-in" style="height: 100%;">
                     <h4 style="color:var(--primary); margin-bottom:15px;">💸 Gastos de Obra (Caixinha)</h4>
@@ -272,7 +251,6 @@
             <div class="modal-body" style="flex-direction:column;">
                 <h2 id="deslig-nome" style="margin-bottom:15px; color:var(--primary);"></h2>
                 <input type="hidden" id="deslig-id">
-                
                 <label style="font-size:11px; color:#888; margin-bottom:5px;">Tipo de Desligamento</label>
                 <select id="deslig-tipo">
                     <option value="Sem Justa Causa">Demissão sem Justa Causa</option>
@@ -281,7 +259,6 @@
                     <option value="Acordo">Acordo (Comum Acordo)</option>
                     <option value="Término de Contrato">Término de Contrato de Experiência</option>
                 </select>
-
                 <label style="font-size:11px; color:#888; margin:10px 0 5px;">Aviso Prévio</label>
                 <select id="deslig-aviso">
                     <option value="Indenizado">Aviso Prévio Indenizado</option>
@@ -289,13 +266,10 @@
                     <option value="Dispensado">Aviso Dispensado</option>
                     <option value="Nao Aplicavel">Não Aplicável</option>
                 </select>
-
                 <label style="font-size:11px; color:#888; margin:10px 0 5px;">Observações / Motivo Detalhado</label>
                 <input id="deslig-motivo" placeholder="Ex: Baixo desempenho, faltas...">
-                
                 <label style="font-size:11px; color:#ff5252; margin:10px 0 5px;">Autenticação Obrigatória</label>
                 <input id="deslig-pass" type="password" placeholder="Sua Senha ADMIN">
-                
                 <button class="btn-primary" style="margin-top:15px; background:#ff5252; color:white;" onclick="confirmarDesligamento()">CONFIRMAR DEMISSÃO</button>
             </div>
         </div>
@@ -303,17 +277,23 @@
 
     <script>
         const { ipcRenderer } = require('electron');
+        
+        // --- VARIÁVEIS GLOBAIS ---
         let listaAtivos = [], listaArquivados = [], obraAtualId = null;
         let clientesAtivos = [], clientesInativos = [];
         let listaEstoque = [], listaObrasAtivas = []; 
+        let listaMateriaisObra = []; 
+        let catObraAtual = 'TODOS';
         let categoriaEstoqueAtual = 'TODOS';
 
-        // MÁSCARAS
+        // --- MÁSCARAS E UTILITÁRIOS ---
         function formatarMoeda(c){ let v=c.value.replace(/\D/g,''); v=(v/100).toFixed(2).toString().replace('.',','); v=v.replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.'); c.value=v; }
         function formatarNome(c){ let p=c.value.toLowerCase().split(' '); for(let i=0;i<p.length;i++) if(p[i]) p[i]=p[i][0].toUpperCase()+p[i].slice(1); c.value=p.join(' '); }
         function formatarCPF(c){ let v=c.value.replace(/\D/g,'').slice(0,11); v=v.replace(/(\d{3})(\d)/,'$1.$2'); v=v.replace(/(\d{3})(\d)/,'$1.$2'); v=v.replace(/(\d{3})(\d{1,2})$/,'$1-$2'); c.value=v; }
         function formatarNIS(c){ let v=c.value.replace(/\D/g,'').slice(0,11); v=v.replace(/(\d{3})(\d)/,'$1.$2'); v=v.replace(/(\d{5})(\d)/,'$1.$2'); v=v.replace(/(\d{2})(\d{1})$/,'$1-$2'); c.value=v; }
+        function fecharModal(id) { document.getElementById(id).style.display='none'; }
 
+        // --- NAVEGAÇÃO PRINCIPAL ---
         async function nav(id) {
             document.querySelectorAll('.main-content > div').forEach(d => d.classList.add('hidden'));
             const aba = document.getElementById('tab-'+id);
@@ -326,32 +306,37 @@
             }
         }
 
+        // --- CARREGAMENTO GERAL (COM PRIVILÉGIOS) ---
         async function carregarTudo() {
-            // --- CIRURGIA DE PRIVILÉGIOS (V36.2 - LIMPEZA TOTAL MESTRE/ENG) ---
-            const user = await ipcRenderer.invoke('get-user-info');
-            if (user) {
-                const cardCadastroObra = document.querySelector('#tab-obras .glass-card');
-                if (user.cargo === 'gerente') {
-                    const esconder = ['fin', 'rh', 'clientes', 'estoque', 'config', 'dash'];
-                    esconder.forEach(id => {
-                        const btn = document.querySelector(`button[onclick="nav('${id}')"]`);
-                        if (btn) btn.style.display = 'none';
-                    });
-                    if (cardCadastroObra) cardCadastroObra.style.display = 'none';
-                    if (!document.getElementById('tab-dash').classList.contains('hidden')) nav('obras');
-                } 
-                else if (user.cargo === 'engenharia') {
-                    const esconder = ['fin', 'rh', 'clientes', 'config', 'dash'];
-                    esconder.forEach(id => {
-                        const btn = document.querySelector(`button[onclick="nav('${id}')"]`);
-                        if (btn) btn.style.display = 'none';
-                    });
-                    if (cardCadastroObra) cardCadastroObra.style.display = 'none';
-                    if (!document.getElementById('tab-dash').classList.contains('hidden')) nav('obras');
-                }
-            }
             try {
-                // FINANCEIRO
+                // 1. VERIFICA PRIVILÉGIOS (QUEM É O USUÁRIO?)
+                const user = await ipcRenderer.invoke('get-user-info');
+                if (user) {
+                    const cardCadastroObra = document.querySelector('#tab-obras .glass-card');
+                    
+                    // LÓGICA DO MESTRE DE OBRAS
+                    if (user.cargo === 'gerente') {
+                        const esconder = ['fin', 'rh', 'clientes', 'estoque', 'config', 'dash'];
+                        esconder.forEach(id => {
+                            const btn = document.querySelector(`button[onclick="nav('${id}')"]`);
+                            if (btn) btn.style.display = 'none';
+                        });
+                        if (cardCadastroObra) cardCadastroObra.style.display = 'none';
+                        if (!document.getElementById('tab-dash').classList.contains('hidden')) nav('obras');
+                    } 
+                    // LÓGICA DO ENGENHEIRO
+                    else if (user.cargo === 'engenharia') {
+                        const esconder = ['fin', 'rh', 'clientes', 'config', 'dash'];
+                        esconder.forEach(id => {
+                            const btn = document.querySelector(`button[onclick="nav('${id}')"]`);
+                            if (btn) btn.style.display = 'none';
+                        });
+                        if (cardCadastroObra) cardCadastroObra.style.display = 'none';
+                        if (!document.getElementById('tab-dash').classList.contains('hidden')) nav('obras');
+                    }
+                }
+
+                // 2. CARREGA DADOS DO FINANCEIRO CORPORATIVO
                 const fin = await ipcRenderer.invoke('get-finance');
                 const cats = await ipcRenderer.invoke('get-categories');
                 document.getElementById('dash-saldo').innerText = `R$ ${fin.saldo.toFixed(2)}`;
@@ -364,7 +349,7 @@
                 }).join('');
                 document.getElementById('lista-categorias').innerHTML = cats.map(c => `<span class="badge badge-pendente" style="margin-right:5px;">${c.nome}</span>`).join('');
 
-                // ESTOQUE
+                // 3. CARREGA ESTOQUE CENTRAL
                 const produtos = await ipcRenderer.invoke('get-products');
                 listaEstoque = produtos;
                 document.getElementById('est-total-itens').innerText = produtos.length;
@@ -372,7 +357,7 @@
                 document.getElementById('est-valor-total').innerText = `R$ ${valTotal.toFixed(2)}`;
                 filtrarEstoque();
 
-                // OBRAS
+                // 4. CARREGA OBRAS
                 const obras = await ipcRenderer.invoke('get-projects');
                 listaObrasAtivas = obras; 
                 const users = await ipcRenderer.invoke('get-system-users');
@@ -393,7 +378,7 @@
                     </div>
                 `).join('');
 
-                // RH
+                // 5. CARREGA RH
                 const func = await ipcRenderer.invoke('get-employees');
                 listaAtivos = func.filter(f => f.status === 'ATIVO');
                 listaArquivados = func.filter(f => f.status === 'INATIVO');
@@ -401,7 +386,7 @@
                 document.getElementById('rh-total-count-arquivados').innerText = listaArquivados.length;
                 filtrarFuncionarios(); renderizarArquivados();
 
-                // CLIENTES
+                // 6. CARREGA CLIENTES
                 const todosClientes = await ipcRenderer.invoke('get-clients');
                 clientesAtivos = todosClientes.filter(c => !c.status || c.status === 'ATIVO');
                 clientesInativos = todosClientes.filter(c => c.status === 'INATIVO');
@@ -410,7 +395,7 @@
                 document.getElementById('ob-cliente-select').innerHTML = '<option value="">Selecione o Cliente...</option>' + clientesAtivos.map(c=>`<option value="${c.id}">${c.nome}</option>`).join('');
                 renderizarClientes();
 
-                // CARGOS E USUARIOS
+                // 7. CARREGA CARGOS E USUÁRIOS
                 carregarCargos();
                 const sysUsers = await ipcRenderer.invoke('get-system-users');
                 document.getElementById('tb-users').innerHTML = sysUsers.map(u=>`<tr><td>${u.username}</td><td>${u.cargo}</td></tr>`).join('');
@@ -442,116 +427,27 @@
             document.getElementById('ob-id').value = ''; document.getElementById('ob-nome').value = ''; document.getElementById('ob-cliente-select').value = ''; document.getElementById('ob-orc').value = ''; document.getElementById('ob-engenheiro').value = ''; document.getElementById('ob-mestre').value = '';
             document.getElementById('titulo-form-obra').innerText = "Iniciar Nova Obra"; document.getElementById('btn-salvar-obra').innerText = "CRIAR OBRA"; document.getElementById('btn-cancelar-obra').style.display = "none";
         }
-        
+
         // --- FUNÇÕES DE GESTÃO DE CLIENTES ---
         function renderizarClientes() { 
             const termo = document.getElementById('cli-busca').value.toLowerCase(); 
             document.getElementById('tb-clientes-ativos').innerHTML = clientesAtivos
             .filter(c => c.nome.toLowerCase().includes(termo))
-            .map(c => `
-              <tr>
-                  <td style="font-weight:bold; color:white;">${c.nome}</td>
-                  <td>${c.documento || '-'}</td>
-                  <td>${c.telefone || '-'}</td>
-                  <td>
-                    <button class="action-icon" onclick="editarCliente(${c.id})">✎</button>
-                    <button class="action-icon" onclick="arquivarCliente(${c.id}, '${c.nome}')" style="color:#ff5252;">🗑️</button>
-                </td>
-            </tr>`).join(''); 
-            
+            .map(c => `<tr><td style="font-weight:bold; color:white;">${c.nome}</td><td>${c.documento || '-'}</td><td>${c.telefone || '-'}</td><td><button class="action-icon" onclick="editarCliente(${c.id})">✎</button><button class="action-icon" onclick="arquivarCliente(${c.id}, '${c.nome}')" style="color:#ff5252;">🗑️</button></td></tr>`).join(''); 
             document.getElementById('tb-clientes-inativos').innerHTML = clientesInativos.map(c => `<tr><td style="opacity:0.6;">${c.nome}</td><td>${c.documento}</td><td><span class="badge badge-atrasado">INATIVO</span></td></tr>`).join(''); 
         }
-
         function filtrarClientes() { renderizarClientes(); }
-
-        function alternarVisaoClientes(modo) { 
-            if(modo === 'ativos') { 
-                document.getElementById('lista-cli-ativos').classList.remove('hidden'); 
-                document.getElementById('lista-cli-arquivados').classList.add('hidden'); 
-                document.getElementById('btn-cli-ativos').classList.add('active'); 
-                document.getElementById('btn-cli-arquivados').classList.remove('active'); 
-            } else { 
-                document.getElementById('lista-cli-ativos').classList.add('hidden'); 
-                document.getElementById('lista-cli-arquivados').classList.remove('hidden'); 
-                document.getElementById('btn-cli-ativos').classList.remove('active'); 
-                document.getElementById('btn-cli-arquivados').classList.add('active'); 
-            } 
-        }
-
-        function novoCliente() { 
-            limparFormCliente(); 
-            document.getElementById('cli-resumo-cards').classList.add('hidden'); 
-            document.getElementById('cli-visao-geral').classList.add('hidden'); 
-            document.getElementById('cli-formulario').classList.remove('hidden'); 
-        }
-
-        function voltarClientes() { 
-            document.getElementById('cli-formulario').classList.add('hidden'); 
-            document.getElementById('cli-resumo-cards').classList.remove('hidden'); 
-            document.getElementById('cli-visao-geral').classList.remove('hidden'); 
-        }
-
-        async function salvarCliente() { 
-            const d = { 
-                id: document.getElementById('cli-id').value, 
-                nome: document.getElementById('cli-nome').value, 
-                doc: document.getElementById('cli-doc').value, 
-                email: document.getElementById('cli-email').value, 
-                tel: document.getElementById('cli-tel').value, 
-                end: document.getElementById('cli-end').value 
-            }; 
-            if(!d.nome) return alert("Nome é obrigatório!"); 
-            await ipcRenderer.invoke('save-client', d); 
-            voltarClientes(); 
-            carregarTudo(); 
-        }
-
-        function editarCliente(id) { 
-            const c = clientesAtivos.find(x => x.id === id); 
-            if(c) { 
-                document.getElementById('cli-id').value = c.id; 
-                document.getElementById('cli-nome').value = c.nome; 
-                document.getElementById('cli-doc').value = c.documento; 
-                document.getElementById('cli-email').value = c.email; 
-                document.getElementById('cli-tel').value = c.telefone; 
-                document.getElementById('cli-end').value = c.endereco; 
-                document.getElementById('titulo-form-cli').innerText = "Editando: " + c.nome; 
-                document.getElementById('cli-resumo-cards').classList.add('hidden'); 
-                document.getElementById('cli-visao-geral').classList.add('hidden'); 
-                document.getElementById('cli-formulario').classList.remove('hidden'); 
-            } 
-        }
-
-        async function arquivarCliente(id, nome) { 
-            if(confirm(`Deseja arquivar o cliente "${nome}"?`)) { 
-                await ipcRenderer.invoke('archive-client', id); 
-                carregarTudo(); 
-            } 
-        }
-
-        function limparFormCliente() { 
-            document.getElementById('cli-id').value = ''; 
-            document.getElementById('cli-nome').value = ''; 
-            document.getElementById('cli-doc').value = ''; 
-            document.getElementById('cli-email').value = ''; 
-            document.getElementById('cli-tel').value = ''; 
-            document.getElementById('cli-end').value = ''; 
-            document.getElementById('titulo-form-cli').innerText = "Novo Cliente"; 
-        }
+        function alternarVisaoClientes(modo) { if(modo === 'ativos') { document.getElementById('lista-cli-ativos').classList.remove('hidden'); document.getElementById('lista-cli-arquivados').classList.add('hidden'); document.getElementById('btn-cli-ativos').classList.add('active'); document.getElementById('btn-cli-arquivados').classList.remove('active'); } else { document.getElementById('lista-cli-ativos').classList.add('hidden'); document.getElementById('lista-cli-arquivados').classList.remove('hidden'); document.getElementById('btn-cli-ativos').classList.remove('active'); document.getElementById('btn-cli-arquivados').classList.add('active'); } }
+        function novoCliente() { limparFormCliente(); document.getElementById('cli-resumo-cards').classList.add('hidden'); document.getElementById('cli-visao-geral').classList.add('hidden'); document.getElementById('cli-formulario').classList.remove('hidden'); }
+        function voltarClientes() { document.getElementById('cli-formulario').classList.add('hidden'); document.getElementById('cli-resumo-cards').classList.remove('hidden'); document.getElementById('cli-visao-geral').classList.remove('hidden'); }
+        async function salvarCliente() { const d = { id: document.getElementById('cli-id').value, nome: document.getElementById('cli-nome').value, doc: document.getElementById('cli-doc').value, email: document.getElementById('cli-email').value, tel: document.getElementById('cli-tel').value, end: document.getElementById('cli-end').value }; if(!d.nome) return alert("Nome é obrigatório!"); await ipcRenderer.invoke('save-client', d); voltarClientes(); carregarTudo(); }
+        function editarCliente(id) { const c = clientesAtivos.find(x => x.id === id); if(c) { document.getElementById('cli-id').value = c.id; document.getElementById('cli-nome').value = c.nome; document.getElementById('cli-doc').value = c.documento; document.getElementById('cli-email').value = c.email; document.getElementById('cli-tel').value = c.telefone; document.getElementById('cli-end').value = c.endereco; document.getElementById('titulo-form-cli').innerText = "Editando: " + c.nome; document.getElementById('cli-resumo-cards').classList.add('hidden'); document.getElementById('cli-visao-geral').classList.add('hidden'); document.getElementById('cli-formulario').classList.remove('hidden'); } }
+        async function arquivarCliente(id, nome) { if(confirm(`Deseja arquivar o cliente "${nome}"?`)) { await ipcRenderer.invoke('archive-client', id); carregarTudo(); } }
+        function limparFormCliente() { document.getElementById('cli-id').value = ''; document.getElementById('cli-nome').value = ''; document.getElementById('cli-doc').value = ''; document.getElementById('cli-email').value = ''; document.getElementById('cli-tel').value = ''; document.getElementById('cli-end').value = ''; document.getElementById('titulo-form-cli').innerText = "Novo Cliente"; }
 
         // --- FUNÇÕES DE CARGOS ---
-        async function carregarCargos() {
-            const roles = await ipcRenderer.invoke('get-roles');
-            document.getElementById('rh-cargo-select').innerHTML = '<option value="">Selecione...</option>' + roles.map(x=>`<option value="${x.titulo}">${x.titulo}</option>`).join('');
-            document.getElementById('tb-roles-config').innerHTML = roles.map(r => `<tr><td>${r.titulo}</td><td>R$ ${parseFloat(r.salario_base || 0).toFixed(2)}</td><td><button class="action-icon" onclick="prepararEdicaoCargo(${r.id}, '${r.titulo}', '${r.salario_base}')">✎</button><button class="action-icon" onclick="deletarCargo(${r.id})" style="color:#ff5252;">🗑️</button></td></tr>`).join('');
-        }
-        async function addRole() {
-            const id = document.getElementById('role-id').value;
-            const d = { id: id || null, titulo: document.getElementById('role-titulo').value, base: document.getElementById('role-salario').value.replace(/\./g,'').replace(',','.'), bonus: 0 };
-            if(!d.titulo) return alert("Digite o título do cargo!");
-            if(id) await ipcRenderer.invoke('edit-role', d); else await ipcRenderer.invoke('add-role', d);
-            limparFormCargo(); carregarCargos();
-        }
+        async function carregarCargos() { const roles = await ipcRenderer.invoke('get-roles'); document.getElementById('rh-cargo-select').innerHTML = '<option value="">Selecione...</option>' + roles.map(x=>`<option value="${x.titulo}">${x.titulo}</option>`).join(''); document.getElementById('tb-roles-config').innerHTML = roles.map(r => `<tr><td>${r.titulo}</td><td>R$ ${parseFloat(r.salario_base || 0).toFixed(2)}</td><td><button class="action-icon" onclick="prepararEdicaoCargo(${r.id}, '${r.titulo}', '${r.salario_base}')">✎</button><button class="action-icon" onclick="deletarCargo(${r.id})" style="color:#ff5252;">🗑️</button></td></tr>`).join(''); }
+        async function addRole() { const id = document.getElementById('role-id').value; const d = { id: id || null, titulo: document.getElementById('role-titulo').value, base: document.getElementById('role-salario').value.replace(/\./g,'').replace(',','.'), bonus: 0 }; if(!d.titulo) return alert("Digite o título do cargo!"); if(id) await ipcRenderer.invoke('edit-role', d); else await ipcRenderer.invoke('add-role', d); limparFormCargo(); carregarCargos(); }
         function prepararEdicaoCargo(id, titulo, salario) { document.getElementById('role-id').value = id; document.getElementById('role-titulo').value = titulo; document.getElementById('role-salario').value = parseFloat(salario).toFixed(2).replace('.',','); document.getElementById('btn-salvar-cargo').innerText = "ATUALIZAR CARGO"; }
         async function deletarCargo(id) { if(confirm("Deseja excluir este cargo?")) { await ipcRenderer.invoke('delete-role', id); carregarCargos(); } }
         function limparFormCargo() { document.getElementById('role-id').value = ''; document.getElementById('role-titulo').value = ''; document.getElementById('role-salario').value = ''; document.getElementById('btn-salvar-cargo').innerText = "ADICIONAR CARGO"; }
@@ -564,129 +460,87 @@
         async function deletarProduto(id) { if(confirm('Excluir material do estoque?')) { await ipcRenderer.invoke('delete-product', id); carregarTudo(); } }
         function abrirTransferencia(id) { const p = listaEstoque.find(x => x.id === id); if(!p) return; document.getElementById('transf-id-prod').value = p.id; document.getElementById('transf-nome-prod').innerText = `Transferir: ${p.nome} (Disp: ${p.quantidade})`; document.getElementById('transf-qtd').value = ''; const sel = document.getElementById('transf-obra'); sel.innerHTML = '<option value="">Selecione a Obra...</option>' + listaObrasAtivas.map(o => `<option value="${o.id}">${o.nome_obra}</option>`).join(''); document.getElementById('modal-transferencia').style.display = 'flex'; }
         async function confirmarTransferencia() { const prodId = document.getElementById('transf-id-prod').value; const obraId = document.getElementById('transf-obra').value; const qtd = document.getElementById('transf-qtd').value; if(!obraId || !qtd) return alert("Selecione Obra e Quantidade!"); const res = await ipcRenderer.invoke('transfer-product', {prodId, obraId, qtd: parseInt(qtd)}); if(res.sucesso) { alert("Transferência realizada com sucesso!"); fecharModal('modal-transferencia'); carregarTudo(); } else { alert("Erro: " + (res.msg || "Falha na transferência")); } }
-        function fecharModal(id) { document.getElementById(id).style.display='none'; }
         function filtrarCategoria(cat) { categoriaEstoqueAtual = cat; document.querySelectorAll('.cat-folder').forEach(b => b.classList.remove('active')); const mapBtn = {'TODOS':'tab-cat-todos', 'MATERIAIS':'tab-cat-mat', 'FERRAMENTAS':'tab-cat-fer', 'EPI':'tab-cat-epi', 'LIMPEZA':'tab-cat-limp', 'DIVERSOS':'tab-cat-div'}; const activeId = mapBtn[cat] || 'tab-cat-todos'; document.getElementById(activeId).classList.add('active'); filtrarEstoque(); }
         function filtrarEstoque() { const termo = document.getElementById('est-busca').value.toLowerCase(); const filtrados = listaEstoque.filter(p => { const matchTexto = p.nome.toLowerCase().includes(termo); const matchCat = categoriaEstoqueAtual === 'TODOS' ? true : (p.categoria === categoriaEstoqueAtual); return matchTexto && matchCat; }); document.getElementById('tb-estoque').innerHTML = filtrados.map(p => { const total = p.quantidade * p.valor_unitario; return `<tr><td><b>${p.nome}</b></td><td>${p.categoria || '-'}</td><td>${p.quantidade}</td><td>R$ ${parseFloat(p.valor_unitario).toFixed(2)}</td><td style="color:var(--primary);">R$ ${total.toFixed(2)}</td><td><button class="action-icon" onclick="abrirTransferencia(${p.id})" title="Transferir para Obra" style="border:none; background:none; color:#FFC107;"><span class="material-icons-round">local_shipping</span></button><button class="action-icon" onclick="editarProduto(${p.id})" style="border:none; background:none; color:var(--primary);">✎</button><button class="action-icon" onclick="deletarProduto(${p.id})" style="border:none; background:none; color:#ff5252;">🗑️</button></td></tr>`; }).join(''); }
 
         // --- RH ---
-        function filtrarFuncionarios() {
-            const termo = document.getElementById('rh-busca').value.toLowerCase();
-            document.getElementById('tb-rh-ativos').innerHTML = listaAtivos
-                .filter(f => f.nome.toLowerCase().includes(termo))
-                .map(f => `
-                    <tr>
-                        <td>${f.nome}</td>
-                        <td>${f.cargo}</td>
-                        <td>
-                            <button class="action-icon" onclick="abrirFicha(${f.id}, '${f.nome}')" title="Ver Ficha">
-                                <span class="material-icons-round">description</span>
-                            </button>
-                            <button class="action-icon" onclick="abrirDemissao(${f.id}, '${f.nome}')" title="Desligar" style="color:#ff5252;">
-                                <span class="material-icons-round">person_remove</span>
-                            </button>
-                        </td>
-                    </tr>
-                `).join('');
-        }
+        function filtrarFuncionarios() { const termo = document.getElementById('rh-busca').value.toLowerCase(); document.getElementById('tb-rh-ativos').innerHTML = listaAtivos.filter(f => f.nome.toLowerCase().includes(termo)).map(f => `<tr><td>${f.nome}</td><td>${f.cargo}</td><td><button class="action-icon" onclick="abrirFicha(${f.id}, '${f.nome}')" title="Ver Ficha"><span class="material-icons-round">description</span></button><button class="action-icon" onclick="abrirDemissao(${f.id}, '${f.nome}')" title="Desligar" style="color:#ff5252;"><span class="material-icons-round">person_remove</span></button></td></tr>`).join(''); }
         function renderizarArquivados() { document.getElementById('tb-rh-arquivados').innerHTML=listaArquivados.map(f=>`<tr><td>${f.nome}</td><td>${f.desligamento_motivo}</td><td>${f.desligamento_data}</td></tr>`).join(''); }
         function alternarVisaoRH(t) { document.getElementById('rh-ativa-conteudo').className = t==='ativa'?'':'hidden'; document.getElementById('rh-arquivados-conteudo').className = t==='arquivados'?'':'hidden'; }
         async function addRhFull() { const fi = document.getElementById('rh-doc-inicial'); const readFile = (f) => new Promise(res => { const r = new FileReader(); r.onload = () => res({name:f.name, content:r.result, type:f.type}); r.readAsDataURL(f); }); const docs = fi.files.length > 0 ? await Promise.all(Array.from(fi.files).map(readFile)) : []; const d = { nome: document.getElementById('rh-nome').value, cpf: document.getElementById('rh-cpf').value, nis: document.getElementById('rh-nis').value, nasc: document.getElementById('rh-nasc').value, tel: document.getElementById('rh-tel').value, email: document.getElementById('rh-email').value, end: document.getElementById('rh-end').value, cargo: document.getElementById('rh-cargo-select').value, sal: 0, docs }; await ipcRenderer.invoke('add-employee-full', d); voltarRH(); carregarTudo(); }
         async function salvarUsuario() { const d = { user: document.getElementById('cfg-user').value, pass: document.getElementById('cfg-pass').value, cargo: document.getElementById('cfg-cargo').value }; await ipcRenderer.invoke('save-user', d); carregarTudo(); }
+
+        // =========================================================
+        // === ÁREA CRÍTICA: CANTEIRO, FINANCEIRO OBRA & PONTO ===
+        // =========================================================
         
-       // --- VARIÁVEIS GLOBAIS NOVAS ---
-let listaMateriaisObra = []; // Guarda os materiais da obra carregada
-let catObraAtual = 'TODOS';  // Guarda a categoria selecionada no modal
+        async function abrirCanteiro(id, nome) {
+            obraAtualId = id; 
+            document.getElementById('canteiro-titulo').innerText = `🚧 Canteiro: ${nome}`; 
+            document.getElementById('modal-canteiro').style.display = 'flex';
+            
+            // 1. Carrega Chamada
+            document.getElementById('lista-chamada').innerHTML = listaAtivos.map(f => `
+                <div class="ponto-card">
+                    <div class="ponto-info"><div>${f.nome}</div><div>${f.cargo}</div></div>
+                    <div style="display:flex; gap:10px;">
+                        <button class="btn-ponto btn-presenca" onclick="marcarPonto(${f.id}, 'PRESENTE')"><span class="material-icons-round">check</span></button>
+                        <button class="btn-ponto btn-falta" onclick="marcarPonto(${f.id}, 'FALTA')"><span class="material-icons-round">close</span></button>
+                    </div>
+                </div>
+            `).join(''); 
+            
+            // 2. Carrega Materiais
+            listaMateriaisObra = await ipcRenderer.invoke('get-project-materials', id);
+            filtrarCategoriaObra('TODOS');
+            
+            // 3. Carrega Histórico
+            carregarHistoricoPonto();
 
-// --- FUNÇÃO ABRIR CANTEIRO ATUALIZADA (V43) ---
-async function abrirCanteiro(id, nome) {
-    obraAtualId = id; 
-    document.getElementById('canteiro-titulo').innerText = `🚧 Canteiro: ${nome}`; 
-    document.getElementById('modal-canteiro').style.display = 'flex';
-    
-    // 1. Carrega Chamada (Mantive igual)
-    document.getElementById('lista-chamada').innerHTML = listaAtivos.map(f => `
-        <div class="ponto-card">
-            <div class="ponto-info"><div>${f.nome}</div><div>${f.cargo}</div></div>
-            <div style="display:flex; gap:10px;">
-                <button class="btn-ponto btn-presenca" onclick="marcarPonto(${f.id}, 'PRESENTE')"><span class="material-icons-round">check</span></button>
-                <button class="btn-ponto btn-falta" onclick="marcarPonto(${f.id}, 'FALTA')"><span class="material-icons-round">close</span></button>
-            </div>
-        </div>
-    `).join(''); 
-    
-    // 2. Carrega Materiais do Banco (COM CATEGORIA AGORA)
-    listaMateriaisObra = await ipcRenderer.invoke('get-project-materials', id);
-    
-    // 3. Renderiza usando o filtro "TODOS" por padrão
-    filtrarCategoriaObra('TODOS');
-    
-    // 4. Carrega Histórico de Ponto
-    carregarHistoricoPonto();
-}
+            // 4. Carrega Financeiro da Obra (CORRIGIDO)
+            await carregarFinanceiroObra();
+        }
 
-// --- NOVA LÓGICA DE FILTRO DENTRO DA OBRA ---
-function filtrarCategoriaObra(cat) {
-    catObraAtual = cat;
-    
-    // 1. Atualiza visual das pastas (Brilho verde)
-    const mapBtn = {'TODOS':'m-cat-todos', 'MATERIAIS':'m-cat-mat', 'FERRAMENTAS':'m-cat-fer', 'EPI':'m-cat-epi', 'LIMPEZA':'m-cat-limp', 'DIVERSOS':'m-cat-div'};
-    document.querySelectorAll('.cat-folder').forEach(b => b.classList.remove('active')); // Remove de todos
-    const activeId = mapBtn[cat];
-    if(document.getElementById(activeId)) document.getElementById(activeId).classList.add('active'); // Adiciona no atual
-
-    // 2. Filtra a lista
-    const filtrados = listaMateriaisObra.filter(m => cat === 'TODOS' ? true : m.categoria === cat);
-    
-    // 3. Desenha a Tabela
-    const tabela = document.getElementById('tb-materiais-obra');
-    if (filtrados.length === 0) {
-        tabela.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#666; padding:20px;">Nenhum item desta categoria na obra.</td></tr>';
-    } else {
-        tabela.innerHTML = filtrados.map(m => `
-            <tr>
-                <td style="font-weight:bold; color:white;">${m.nome_material}</td>
-                <td style="font-size:11px; color:#888;">${m.categoria || 'Geral'}</td>
-                <td style="color:var(--primary); font-weight:bold; font-size:14px;">${m.quantidade}</td>
-                <td><button class="action-icon" style="color:#666;" title="Ver Detalhes">👁️</button></td>
-            </tr>
-        `).join('');
-    }
-
-    // 4. Atualiza o Select de Consumo (Mostra apenas o que está filtrado ou tudo)
-    const select = document.getElementById('m-uso-mat');
-    select.innerHTML = '<option value="">Selecione para baixar...</option>' + 
-        filtrados.map(m => `<option value="${m.produto_id}">${m.nome_material} (Disp: ${m.quantidade})</option>`).join('');
-}
         async function marcarPonto(funcId, status) { await ipcRenderer.invoke('add-ponto', {obraId: obraAtualId, funcId, status}); carregarHistoricoPonto(); }
         async function carregarHistoricoPonto() { const h = await ipcRenderer.invoke('get-ponto-obra', obraAtualId); document.getElementById('tb-historico-ponto').innerHTML = h.map(i => `<tr><td>${new Date(i.data_registro).toLocaleDateString()}</td><td>${i.nome_funcionario}</td><td><span class="badge ${i.status==='PRESENTE'?'badge-pago':'badge-atrasado'}">${i.status}</span></td></tr>`).join(''); }
-        
-        // --- FUNÇÃO FICHA ATUALIZADA ---
-        async function abrirFicha(id, nome) {
-            document.getElementById('modal-nome-func').innerText = nome;
-            document.getElementById('modal-ficha').style.display = 'flex';
-            const d = await ipcRenderer.invoke('get-employee-details', id);
-            const timelineHTML = d.history.map(h => {
-                const dataFormatada = new Date(h.data_evento).toLocaleDateString('pt-BR');
-                return `<div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><span class="t-date">${dataFormatada}</span><div class="t-title">${h.tipo.toUpperCase()}</div><div class="t-desc">${h.descricao}</div></div></div>`;
-            }).join('');
-            const docsHTML = d.docs.length > 0 ? d.docs.map(f => `<div class="doc-card"><span class="material-icons-round">description</span><div>${f.nome_arquivo}</div></div>`).join('') : '<div style="color:#666; font-size:12px; font-style:italic;">Nenhum documento anexado.</div>';
-            document.getElementById('lista-timeline').innerHTML = `<div style="display:flex; gap:30px; height:100%;"><div style="flex:2; overflow-y:auto; padding-right:10px;"><h4 style="color:var(--primary); margin-bottom:20px;">📅 Linha do Tempo</h4><div class="timeline-container">${timelineHTML}</div></div><div style="flex:1; border-left:1px solid #333; padding-left:20px;"><h4 style="color:#888; margin-bottom:20px;">📂 Documentos</h4>${docsHTML}</div></div>`;
-            document.getElementById('lista-docs').innerHTML = ''; 
+
+        // --- ABA DE MATERIAIS DA OBRA (COM FILTRO) ---
+        function filtrarCategoriaObra(cat) {
+            catObraAtual = cat;
+            const mapBtn = {'TODOS':'m-cat-todos', 'MATERIAIS':'m-cat-mat', 'FERRAMENTAS':'m-cat-fer', 'EPI':'m-cat-epi', 'LIMPEZA':'m-cat-limp', 'DIVERSOS':'m-cat-div'};
+            document.querySelectorAll('.cat-folder').forEach(b => b.classList.remove('active')); 
+            const activeId = mapBtn[cat];
+            if(document.getElementById(activeId)) document.getElementById(activeId).classList.add('active'); 
+
+            const filtrados = listaMateriaisObra.filter(m => cat === 'TODOS' ? true : m.categoria === cat);
+            const tabela = document.getElementById('tb-materiais-obra');
+            
+            if (filtrados.length === 0) {
+                tabela.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#666; padding:20px;">Nenhum item desta categoria na obra.</td></tr>';
+            } else {
+                tabela.innerHTML = filtrados.map(m => `<tr><td style="font-weight:bold; color:white;">${m.nome_material}</td><td style="font-size:11px; color:#888;">${m.categoria || 'Geral'}</td><td style="color:var(--primary); font-weight:bold; font-size:14px;">${m.quantidade}</td><td><button class="action-icon" style="color:#666;" title="Ver Detalhes">👁️</button></td></tr>`).join('');
+            }
+            const select = document.getElementById('m-uso-mat');
+            select.innerHTML = '<option value="">Selecione para baixar...</option>' + filtrados.map(m => `<option value="${m.produto_id}">${m.nome_material} (Disp: ${m.quantidade})</option>`).join('');
+        }
+        async function registrarUsoMaterial() { alert("Função de consumo será integrada em breve!"); }
+
+        // --- FINANCEIRO DA OBRA (NOVO) ---
+        async function addGastoObra() {
+            const desc = document.getElementById('m-fin-desc').value;
+            const valor = document.getElementById('m-fin-val').value.replace(/\./g,'').replace(',','.');
+            const data = document.getElementById('m-fin-data').value;
+            if(!desc || !valor || !data) return alert("Preencha todos os campos do gasto!");
+            const gasto = { tipo: 'DESPESA', descricao: `[OBRA: ${obraAtualId}] ${desc}`, valor: parseFloat(valor), data_vencimento: data, status: 'PAGO', obra_id: obraAtualId };
+            const res = await ipcRenderer.invoke('save-finance-entry', gasto);
+            if(res) { alert("Gasto lançado com sucesso!"); document.getElementById('m-fin-desc').value = ''; document.getElementById('m-fin-val').value = ''; document.getElementById('m-fin-data').value = ''; await carregarFinanceiroObra(); carregarTudo(); }
         }
 
-        async function confirmarDesligamento() { 
-            const id = document.getElementById('deslig-id').value;
-            const tipo = document.getElementById('deslig-tipo').value;
-            const aviso = document.getElementById('deslig-aviso').value;
-            const obs = document.getElementById('deslig-motivo').value;
-            const pass = document.getElementById('deslig-pass').value;
-            const motivoCompleto = `[${tipo}] - Aviso: ${aviso}. Obs: ${obs}`;
-            const res = await ipcRenderer.invoke('terminate-employee', {id: id, motivo: motivoCompleto, adminPass: pass});
-            if(res.sucesso) { fecharModal('modal-desligamento'); carregarTudo(); } else { alert(res.msg || "Erro na senha ou processo."); }
+        async function carregarFinanceiroObra() {
+            const todasEntradas = await ipcRenderer.invoke('get-finance');
+            const gastosObra = todasEntradas.lista.filter(f => f.descricao.includes(`[OBRA: ${obraAtualId}]`));
+            document.getElementById('tb-financeiro-obra').innerHTML = gastosObra.map(g => `<tr><td>${new Date(g.data_vencimento).toLocaleDateString()}</td><td>${g.descricao.replace(`[OBRA: ${obraAtualId}] `, '')}</td><td style="color:#ff5252;">R$ ${parseFloat(g.valor).toFixed(2)}</td></tr>`).join('');
         }
-        function abrirDemissao(id, nome) { document.getElementById('deslig-nome').innerText = nome; document.getElementById('deslig-id').value = id; document.getElementById('modal-desligamento').style.display='flex'; }
-
-        nav('dash');
 
         function mNav(aba) {
             document.querySelectorAll('[id^="mbody-"]').forEach(d => d.style.display = 'none');
@@ -694,8 +548,14 @@ function filtrarCategoriaObra(cat) {
             document.getElementById('mbody-' + aba).style.display = (aba === 'rh' ? 'flex' : 'block');
             document.getElementById('mtab-' + aba).classList.add('active');
         }
-        async function registrarUsoMaterial() { alert("Função de consumo será integrada ao Financeiro Global no próximo passo!"); }
-        async function addGastoObra() { alert("Gasto lançado! Ele aparecerá no Financeiro da Matriz como 'Gasto de Obra'."); }
+
+        // --- FICHAS ---
+        async function abrirFicha(id, nome) { document.getElementById('modal-nome-func').innerText = nome; document.getElementById('modal-ficha').style.display = 'flex'; const d = await ipcRenderer.invoke('get-employee-details', id); const timelineHTML = d.history.map(h => { const dataFormatada = new Date(h.data_evento).toLocaleDateString('pt-BR'); return `<div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><span class="t-date">${dataFormatada}</span><div class="t-title">${h.tipo.toUpperCase()}</div><div class="t-desc">${h.descricao}</div></div></div>`; }).join(''); const docsHTML = d.docs.length > 0 ? d.docs.map(f => `<div class="doc-card"><span class="material-icons-round">description</span><div>${f.nome_arquivo}</div></div>`).join('') : '<div style="color:#666; font-size:12px; font-style:italic;">Nenhum documento anexado.</div>'; document.getElementById('lista-timeline').innerHTML = `<div style="display:flex; gap:30px; height:100%;"><div style="flex:2; overflow-y:auto; padding-right:10px;"><h4 style="color:var(--primary); margin-bottom:20px;">📅 Linha do Tempo</h4><div class="timeline-container">${timelineHTML}</div></div><div style="flex:1; border-left:1px solid #333; padding-left:20px;"><h4 style="color:#888; margin-bottom:20px;">📂 Documentos</h4>${docsHTML}</div></div>`; document.getElementById('lista-docs').innerHTML = ''; }
+        async function confirmarDesligamento() { const id = document.getElementById('deslig-id').value; const tipo = document.getElementById('deslig-tipo').value; const aviso = document.getElementById('deslig-aviso').value; const obs = document.getElementById('deslig-motivo').value; const pass = document.getElementById('deslig-pass').value; const motivoCompleto = `[${tipo}] - Aviso: ${aviso}. Obs: ${obs}`; const res = await ipcRenderer.invoke('terminate-employee', {id: id, motivo: motivoCompleto, adminPass: pass}); if(res.sucesso) { fecharModal('modal-desligamento'); carregarTudo(); } else { alert(res.msg || "Erro na senha ou processo."); } }
+        function abrirDemissao(id, nome) { document.getElementById('deslig-nome').innerText = nome; document.getElementById('deslig-id').value = id; document.getElementById('modal-desligamento').style.display='flex'; }
+
+        // --- INICIALIZAÇÃO ---
+        nav('dash');
     </script>
 </body>
 </html>
