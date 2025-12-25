@@ -153,7 +153,7 @@
 
     <div id="modal-transferencia" class="modal-overlay">
         <div class="modal-content modal-small">
-            <div class="modal-header"><h3>🚚 Transferir para Obra</h3><button onclick="fecharModal('modal-transferencia')" style="background:none;border:none;color:white;cursor:pointer;">X</button></div>
+            <div class="modal-header"><h3>🚚 Transferir para Obra</h3><button onclick="fecharModal('modal-transferencia')" class="btn-close">X</button></div>
             <div class="modal-body" style="flex-direction:column;">
                 <h4 id="transf-nome-prod" style="color:var(--primary); margin-bottom:10px;">Produto</h4>
                 <input type="hidden" id="transf-id-prod">
@@ -164,13 +164,111 @@
         </div>
     </div>
 
-    <div id="modal-canteiro" class="modal-overlay"><div class="modal-content" style="width: 95%;"><div class="modal-header"><h3 id="canteiro-titulo" style="color:var(--primary);">🚧 Canteiro</h3><button onclick="fecharModal('modal-canteiro')" style="background:none;border:none;color:white;cursor:pointer;">X</button></div><div class="modal-body" style="gap:20px;"><div style="flex:1; border-right:1px solid #333; padding-right:10px;"><h4 style="color:#888; margin-bottom:15px;">👷 Chamada do Dia</h4><div id="lista-chamada"></div></div><div style="flex:1; border-right:1px solid #333; padding-right:10px;"><h4 style="color:#888; margin-bottom:15px;">📦 Inventário da Obra</h4><table style="margin-top:0;"><thead><tr><th>Material</th><th>Qtd</th></tr></thead><tbody id="tb-materiais-obra"></tbody></table></div><div style="flex:1;"><h4 style="color:#888; margin-bottom:15px;">📅 Histórico de Ponto</h4><table id="tb-historico-ponto" style="margin-top:0;"></table></div></div></div></div>
+    <div id="modal-canteiro" class="modal-overlay">
+        <div class="modal-content modal-large"> 
+            
+            <div class="modal-header">
+                <h3 id="canteiro-titulo" style="color:var(--primary); margin:0;">🚧 Canteiro</h3>
+                <button onclick="fecharModal('modal-canteiro')" class="btn-close">X</button>
+            </div>
+
+            <div class="modal-tabs">
+                <div class="m-tab active" id="mtab-rh" onclick="mNav('rh')">EQUIPE & PONTO</div>
+                <div class="m-tab" id="mtab-est" onclick="mNav('est')">ALMOXARIFADO</div>
+                <div class="m-tab" id="mtab-fin" onclick="mNav('fin')">FINANCEIRO (OBRA)</div>
+            </div>
+
+            <div class="modal-body">
+                
+                <div id="mbody-rh" class="fade-in" style="display: flex; gap: 20px; height: 100%;">
+                    <div style="flex:1; border-right:1px solid #333; padding-right:20px; overflow-y: auto;">
+                        <h4 style="color:#888; margin-bottom:15px; position: sticky; top:0; background:#111; padding-bottom:10px;">👷 Chamada do Dia</h4>
+                        <div id="lista-chamada"></div>
+                    </div>
+                    <div style="flex:1; padding-left: 10px; overflow-y: auto;">
+                        <h4 style="color:#888; margin-bottom:15px; position: sticky; top:0; background:#111; padding-bottom:10px;">📅 Histórico de Ponto</h4>
+                        <table id="tb-historico-ponto" style="margin-top:0;"></table>
+                    </div>
+                </div>
+
+                <div id="mbody-est" class="hidden fade-in" style="height: 100%;">
     
-    <div id="modal-ficha" class="modal-overlay"><div class="modal-content"><div class="modal-header"><h3 id="modal-nome-func">Ficha</h3><button onclick="fecharModal('modal-ficha')" style="background:none;border:none;color:white;cursor:pointer;">X</button></div><div class="modal-body"><div id="lista-timeline" style="flex:1;"></div><div id="lista-docs" style="flex:1;"></div></div></div></div>
+    <div class="cat-container" style="justify-content: center; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 20px;">
+        <div class="cat-folder active" id="m-cat-todos" onclick="filtrarCategoriaObra('TODOS')">
+            <span class="material-icons-round">inventory_2</span><small>Geral</small>
+        </div>
+        <div class="cat-folder" id="m-cat-mat" onclick="filtrarCategoriaObra('MATERIAIS')">
+            <span class="material-icons-round">foundation</span><small>Materiais</small>
+        </div>
+        <div class="cat-folder" id="m-cat-fer" onclick="filtrarCategoriaObra('FERRAMENTAS')">
+            <span class="material-icons-round">handyman</span><small>Ferramentas</small>
+        </div>
+        <div class="cat-folder" id="m-cat-epi" onclick="filtrarCategoriaObra('EPI')">
+            <span class="material-icons-round">engineering</span><small>EPIs</small>
+        </div>
+        <div class="cat-folder" id="m-cat-limp" onclick="filtrarCategoriaObra('LIMPEZA')">
+            <span class="material-icons-round">cleaning_services</span><small>Limpeza</small>
+        </div>
+        <div class="cat-folder" id="m-cat-div" onclick="filtrarCategoriaObra('DIVERSOS')">
+            <span class="material-icons-round">category</span><small>Diversos</small>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 20px; height: calc(100% - 130px);"> <div style="flex:2; overflow-y: auto;">
+            <h4 style="color:var(--primary); margin-bottom:15px;">📦 Materiais Disponíveis na Obra</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Material</th>
+                        <th>Categoria</th> <th>Qtd</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="tb-materiais-obra">
+                    </tbody>
+            </table>
+        </div>
+
+        <div style="flex:1;">
+            <div style="background: #161616; padding: 20px; border-radius: 12px; border: 1px solid #333;">
+                <h4 style="color:#888; margin-bottom:15px;">📝 Registrar Consumo</h4>
+                <label style="font-size:11px; color:#666;">O que foi usado?</label>
+                <select id="m-uso-mat" style="margin-bottom:15px;"><option value="">Selecione...</option></select>
+                
+                <label style="font-size:11px; color:#666;">Quantidade</label>
+                <input type="number" id="m-uso-qtd" placeholder="Qtd usada">
+                
+                <button class="btn-primary" onclick="registrarUsoMaterial()">BAIXAR DO ESTOQUE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+                <div id="mbody-fin" class="hidden fade-in" style="height: 100%;">
+                    <h4 style="color:var(--primary); margin-bottom:15px;">💸 Gastos de Obra (Caixinha)</h4>
+                    <div class="grid-form" style="grid-template-columns: 2fr 1fr 1fr auto; margin-bottom: 20px; background: #161616; padding: 15px; border-radius: 12px;">
+                        <input id="m-fin-desc" placeholder="Ex: Compra de pregos" style="margin-bottom:0;">
+                        <input id="m-fin-val" placeholder="R$ 0,00" oninput="formatarMoeda(this)" style="margin-bottom:0;">
+                        <input type="date" id="m-fin-data" style="margin-bottom:0;">
+                        <button class="btn-primary" onclick="addGastoObra()" style="margin-bottom:0; height: 42px;">LANÇAR</button>
+                    </div>
+                    <table><thead><tr><th>Data</th><th>Descrição</th><th>Valor</th></tr></thead><tbody id="tb-financeiro-obra"></tbody></table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    
+    <div id="modal-ficha" class="modal-overlay">
+        <div class="modal-content modal-large"> 
+            <div class="modal-header"><h3 id="modal-nome-func">Ficha</h3><button onclick="fecharModal('modal-ficha')" class="btn-close">X</button></div>
+            <div class="modal-body"><div id="lista-timeline" style="height:100%;"></div><div id="lista-docs"></div></div>
+        </div>
+    </div>
     
     <div id="modal-desligamento" class="modal-overlay">
         <div class="modal-content modal-small">
-            <div class="modal-header"><h3>⚠️ Desligamento</h3><button onclick="fecharModal('modal-desligamento')" style="background:none;border:none;color:white;cursor:pointer;">X</button></div>
+            <div class="modal-header"><h3>⚠️ Desligamento</h3><button onclick="fecharModal('modal-desligamento')" class="btn-close">X</button></div>
             <div class="modal-body" style="flex-direction:column;">
                 <h2 id="deslig-nome" style="margin-bottom:15px; color:var(--primary);"></h2>
                 <input type="hidden" id="deslig-id">
@@ -229,6 +327,29 @@
         }
 
         async function carregarTudo() {
+            // --- CIRURGIA DE PRIVILÉGIOS (V36.2 - LIMPEZA TOTAL MESTRE/ENG) ---
+            const user = await ipcRenderer.invoke('get-user-info');
+            if (user) {
+                const cardCadastroObra = document.querySelector('#tab-obras .glass-card');
+                if (user.cargo === 'gerente') {
+                    const esconder = ['fin', 'rh', 'clientes', 'estoque', 'config', 'dash'];
+                    esconder.forEach(id => {
+                        const btn = document.querySelector(`button[onclick="nav('${id}')"]`);
+                        if (btn) btn.style.display = 'none';
+                    });
+                    if (cardCadastroObra) cardCadastroObra.style.display = 'none';
+                    if (!document.getElementById('tab-dash').classList.contains('hidden')) nav('obras');
+                } 
+                else if (user.cargo === 'engenharia') {
+                    const esconder = ['fin', 'rh', 'clientes', 'config', 'dash'];
+                    esconder.forEach(id => {
+                        const btn = document.querySelector(`button[onclick="nav('${id}')"]`);
+                        if (btn) btn.style.display = 'none';
+                    });
+                    if (cardCadastroObra) cardCadastroObra.style.display = 'none';
+                    if (!document.getElementById('tab-dash').classList.contains('hidden')) nav('obras');
+                }
+            }
             try {
                 // FINANCEIRO
                 const fin = await ipcRenderer.invoke('get-finance');
@@ -260,9 +381,11 @@
                 
                 document.getElementById('lista-obras-cards').innerHTML = obras.map(o => `
                     <div class="glass-card" style="border-left: 5px solid var(--primary); position: relative;">
-                        <div style="position:absolute; top:15px; right:15px;">
-                            <button class="action-icon" onclick="editarObra(event, ${o.id})">✎</button>
-                        </div>
+                        ${user.cargo !== 'gerente' && user.cargo !== 'engenharia' ? `
+                            <div style="position:absolute; top:15px; right:15px;">
+                                <button class="action-icon" onclick="editarObra(event, ${o.id})">✎</button>
+                            </div>
+                        ` : ''}
                         <h3 style="color:white; cursor:pointer;" onclick="abrirCanteiro(${o.id}, '${o.nome_obra}')">${o.nome_obra}</h3>
                         <p style="font-size:12px; color:#888; margin:5px 0;">Cliente: ${o.cliente_nome || 'N/D'}</p>
                         <p style="font-size:11px; color:var(--primary);">Mestre: ${o.mestre_nome || 'N/D'}</p>
@@ -270,7 +393,7 @@
                     </div>
                 `).join('');
 
-                // RH (VISUAL CORRIGIDO: ÍCONES DISCRETOS V33.3)
+                // RH
                 const func = await ipcRenderer.invoke('get-employees');
                 listaAtivos = func.filter(f => f.status === 'ATIVO');
                 listaArquivados = func.filter(f => f.status === 'INATIVO');
@@ -319,6 +442,102 @@
             document.getElementById('ob-id').value = ''; document.getElementById('ob-nome').value = ''; document.getElementById('ob-cliente-select').value = ''; document.getElementById('ob-orc').value = ''; document.getElementById('ob-engenheiro').value = ''; document.getElementById('ob-mestre').value = '';
             document.getElementById('titulo-form-obra').innerText = "Iniciar Nova Obra"; document.getElementById('btn-salvar-obra').innerText = "CRIAR OBRA"; document.getElementById('btn-cancelar-obra').style.display = "none";
         }
+        
+        // --- FUNÇÕES DE GESTÃO DE CLIENTES ---
+        function renderizarClientes() { 
+            const termo = document.getElementById('cli-busca').value.toLowerCase(); 
+            document.getElementById('tb-clientes-ativos').innerHTML = clientesAtivos
+            .filter(c => c.nome.toLowerCase().includes(termo))
+            .map(c => `
+              <tr>
+                  <td style="font-weight:bold; color:white;">${c.nome}</td>
+                  <td>${c.documento || '-'}</td>
+                  <td>${c.telefone || '-'}</td>
+                  <td>
+                    <button class="action-icon" onclick="editarCliente(${c.id})">✎</button>
+                    <button class="action-icon" onclick="arquivarCliente(${c.id}, '${c.nome}')" style="color:#ff5252;">🗑️</button>
+                </td>
+            </tr>`).join(''); 
+            
+            document.getElementById('tb-clientes-inativos').innerHTML = clientesInativos.map(c => `<tr><td style="opacity:0.6;">${c.nome}</td><td>${c.documento}</td><td><span class="badge badge-atrasado">INATIVO</span></td></tr>`).join(''); 
+        }
+
+        function filtrarClientes() { renderizarClientes(); }
+
+        function alternarVisaoClientes(modo) { 
+            if(modo === 'ativos') { 
+                document.getElementById('lista-cli-ativos').classList.remove('hidden'); 
+                document.getElementById('lista-cli-arquivados').classList.add('hidden'); 
+                document.getElementById('btn-cli-ativos').classList.add('active'); 
+                document.getElementById('btn-cli-arquivados').classList.remove('active'); 
+            } else { 
+                document.getElementById('lista-cli-ativos').classList.add('hidden'); 
+                document.getElementById('lista-cli-arquivados').classList.remove('hidden'); 
+                document.getElementById('btn-cli-ativos').classList.remove('active'); 
+                document.getElementById('btn-cli-arquivados').classList.add('active'); 
+            } 
+        }
+
+        function novoCliente() { 
+            limparFormCliente(); 
+            document.getElementById('cli-resumo-cards').classList.add('hidden'); 
+            document.getElementById('cli-visao-geral').classList.add('hidden'); 
+            document.getElementById('cli-formulario').classList.remove('hidden'); 
+        }
+
+        function voltarClientes() { 
+            document.getElementById('cli-formulario').classList.add('hidden'); 
+            document.getElementById('cli-resumo-cards').classList.remove('hidden'); 
+            document.getElementById('cli-visao-geral').classList.remove('hidden'); 
+        }
+
+        async function salvarCliente() { 
+            const d = { 
+                id: document.getElementById('cli-id').value, 
+                nome: document.getElementById('cli-nome').value, 
+                doc: document.getElementById('cli-doc').value, 
+                email: document.getElementById('cli-email').value, 
+                tel: document.getElementById('cli-tel').value, 
+                end: document.getElementById('cli-end').value 
+            }; 
+            if(!d.nome) return alert("Nome é obrigatório!"); 
+            await ipcRenderer.invoke('save-client', d); 
+            voltarClientes(); 
+            carregarTudo(); 
+        }
+
+        function editarCliente(id) { 
+            const c = clientesAtivos.find(x => x.id === id); 
+            if(c) { 
+                document.getElementById('cli-id').value = c.id; 
+                document.getElementById('cli-nome').value = c.nome; 
+                document.getElementById('cli-doc').value = c.documento; 
+                document.getElementById('cli-email').value = c.email; 
+                document.getElementById('cli-tel').value = c.telefone; 
+                document.getElementById('cli-end').value = c.endereco; 
+                document.getElementById('titulo-form-cli').innerText = "Editando: " + c.nome; 
+                document.getElementById('cli-resumo-cards').classList.add('hidden'); 
+                document.getElementById('cli-visao-geral').classList.add('hidden'); 
+                document.getElementById('cli-formulario').classList.remove('hidden'); 
+            } 
+        }
+
+        async function arquivarCliente(id, nome) { 
+            if(confirm(`Deseja arquivar o cliente "${nome}"?`)) { 
+                await ipcRenderer.invoke('archive-client', id); 
+                carregarTudo(); 
+            } 
+        }
+
+        function limparFormCliente() { 
+            document.getElementById('cli-id').value = ''; 
+            document.getElementById('cli-nome').value = ''; 
+            document.getElementById('cli-doc').value = ''; 
+            document.getElementById('cli-email').value = ''; 
+            document.getElementById('cli-tel').value = ''; 
+            document.getElementById('cli-end').value = ''; 
+            document.getElementById('titulo-form-cli').innerText = "Novo Cliente"; 
+        }
 
         // --- FUNÇÕES DE CARGOS ---
         async function carregarCargos() {
@@ -349,7 +568,7 @@
         function filtrarCategoria(cat) { categoriaEstoqueAtual = cat; document.querySelectorAll('.cat-folder').forEach(b => b.classList.remove('active')); const mapBtn = {'TODOS':'tab-cat-todos', 'MATERIAIS':'tab-cat-mat', 'FERRAMENTAS':'tab-cat-fer', 'EPI':'tab-cat-epi', 'LIMPEZA':'tab-cat-limp', 'DIVERSOS':'tab-cat-div'}; const activeId = mapBtn[cat] || 'tab-cat-todos'; document.getElementById(activeId).classList.add('active'); filtrarEstoque(); }
         function filtrarEstoque() { const termo = document.getElementById('est-busca').value.toLowerCase(); const filtrados = listaEstoque.filter(p => { const matchTexto = p.nome.toLowerCase().includes(termo); const matchCat = categoriaEstoqueAtual === 'TODOS' ? true : (p.categoria === categoriaEstoqueAtual); return matchTexto && matchCat; }); document.getElementById('tb-estoque').innerHTML = filtrados.map(p => { const total = p.quantidade * p.valor_unitario; return `<tr><td><b>${p.nome}</b></td><td>${p.categoria || '-'}</td><td>${p.quantidade}</td><td>R$ ${parseFloat(p.valor_unitario).toFixed(2)}</td><td style="color:var(--primary);">R$ ${total.toFixed(2)}</td><td><button class="action-icon" onclick="abrirTransferencia(${p.id})" title="Transferir para Obra" style="border:none; background:none; color:#FFC107;"><span class="material-icons-round">local_shipping</span></button><button class="action-icon" onclick="editarProduto(${p.id})" style="border:none; background:none; color:var(--primary);">✎</button><button class="action-icon" onclick="deletarProduto(${p.id})" style="border:none; background:none; color:#ff5252;">🗑️</button></td></tr>`; }).join(''); }
 
-        // --- RH (VISUAL CORRIGIDO: ÍCONES V33.3) ---
+        // --- RH ---
         function filtrarFuncionarios() {
             const termo = document.getElementById('rh-busca').value.toLowerCase();
             document.getElementById('tb-rh-ativos').innerHTML = listaAtivos
@@ -374,103 +593,109 @@
         async function addRhFull() { const fi = document.getElementById('rh-doc-inicial'); const readFile = (f) => new Promise(res => { const r = new FileReader(); r.onload = () => res({name:f.name, content:r.result, type:f.type}); r.readAsDataURL(f); }); const docs = fi.files.length > 0 ? await Promise.all(Array.from(fi.files).map(readFile)) : []; const d = { nome: document.getElementById('rh-nome').value, cpf: document.getElementById('rh-cpf').value, nis: document.getElementById('rh-nis').value, nasc: document.getElementById('rh-nasc').value, tel: document.getElementById('rh-tel').value, email: document.getElementById('rh-email').value, end: document.getElementById('rh-end').value, cargo: document.getElementById('rh-cargo-select').value, sal: 0, docs }; await ipcRenderer.invoke('add-employee-full', d); voltarRH(); carregarTudo(); }
         async function salvarUsuario() { const d = { user: document.getElementById('cfg-user').value, pass: document.getElementById('cfg-pass').value, cargo: document.getElementById('cfg-cargo').value }; await ipcRenderer.invoke('save-user', d); carregarTudo(); }
         
-        async function abrirCanteiro(id, nome) {
-            obraAtualId = id; document.getElementById('canteiro-titulo').innerText = `🚧 Canteiro: ${nome}`; document.getElementById('modal-canteiro').style.display = 'flex';
-            document.getElementById('lista-chamada').innerHTML = listaAtivos.map(f => `
-                <div class="ponto-card">
-                    <div class="ponto-info"><div>${f.nome}</div><div>${f.cargo}</div></div>
-                    <div style="display:flex; gap:10px;">
-                        <button class="btn-ponto btn-presenca" onclick="marcarPonto(${f.id}, 'PRESENTE')"><span class="material-icons-round" style="font-size:14px;">check_circle</span></button>
-                        <button class="btn-ponto btn-falta" onclick="marcarPonto(${f.id}, 'FALTA')"><span class="material-icons-round" style="font-size:14px;">cancel</span></button>
-                    </div>
-                </div>
-            `).join(''); 
-            const materiais = await ipcRenderer.invoke('get-project-materials', id);
-            document.getElementById('tb-materiais-obra').innerHTML = materiais.length ? materiais.map(m => `<tr><td>${m.nome_material}</td><td style="color:var(--primary); font-weight:bold;">${m.quantidade}</td></tr>`).join('') : '<tr><td colspan="2" style="color:#666;">Nenhum material recebido.</td></tr>';
-            carregarHistoricoPonto();
-        }
-        async function marcarPonto(funcId, status) { await ipcRenderer.invoke('add-ponto', {obraId: obraAtualId, funcId, status}); carregarHistoricoPonto(); }
-        async function carregarHistoricoPonto() { const h = await ipcRenderer.invoke('get-ponto-obra', obraAtualId); document.getElementById('tb-historico-ponto').innerHTML = h.map(i => `<tr><td>${new Date(i.data_registro).toLocaleDateString()}</td><td>${i.nome_funcionario}</td><td><span class="badge ${i.status==='PRESENTE'?'badge-pago':'badge-atrasado'}">${i.status}</span></td></tr>`).join(''); }
-        function fecharModal(id) { document.getElementById(id).style.display='none'; }
-        // --- FUNÇÃO FICHA ATUALIZADA (V35 - TIMELINE PRO) ---
-async function abrirFicha(id, nome) {
-    document.getElementById('modal-nome-func').innerText = nome;
-    document.getElementById('modal-ficha').style.display = 'flex';
-    
-    const d = await ipcRenderer.invoke('get-employee-details', id);
-    
-    // CONSTRÓI A TIMELINE
-    const timelineHTML = d.history.map(h => {
-        // Formata a data para PT-BR (Ex: 24/12/2025)
-        const dataFormatada = new Date(h.data_evento).toLocaleDateString('pt-BR');
-        
-        return `
-            <div class="timeline-item">
-                <div class="timeline-dot"></div>
-                <div class="timeline-content">
-                    <span class="t-date">${dataFormatada}</span>
-                    <div class="t-title">${h.tipo.toUpperCase()}</div>
-                    <div class="t-desc">${h.descricao}</div>
-                </div>
-            </div>
-        `;
-    }).join('');
+       // --- VARIÁVEIS GLOBAIS NOVAS ---
+let listaMateriaisObra = []; // Guarda os materiais da obra carregada
+let catObraAtual = 'TODOS';  // Guarda a categoria selecionada no modal
 
-    // CONSTRÓI A LISTA DE DOCUMENTOS
-    const docsHTML = d.docs.length > 0 
-        ? d.docs.map(f => `
-            <div class="doc-card">
-                <span class="material-icons-round">description</span>
-                <div>${f.nome_arquivo}</div>
-            </div>`).join('')
-        : '<div style="color:#666; font-size:12px; font-style:italic;">Nenhum documento anexado.</div>';
-
-    // RENDERIZA NA TELA (DIVIDINDO EM DUAS COLUNAS: HISTÓRICO E DOCS)
-    document.getElementById('lista-timeline').innerHTML = `
-        <div style="display:flex; gap:30px; height:100%;">
-            <div style="flex:2; overflow-y:auto; padding-right:10px;">
-                <h4 style="color:var(--primary); margin-bottom:20px;">📅 Linha do Tempo</h4>
-                <div class="timeline-container">
-                    ${timelineHTML}
-                </div>
-            </div>
-            <div style="flex:1; border-left:1px solid #333; padding-left:20px;">
-                <h4 style="color:#888; margin-bottom:20px;">📂 Documentos</h4>
-                ${docsHTML}
+// --- FUNÇÃO ABRIR CANTEIRO ATUALIZADA (V43) ---
+async function abrirCanteiro(id, nome) {
+    obraAtualId = id; 
+    document.getElementById('canteiro-titulo').innerText = `🚧 Canteiro: ${nome}`; 
+    document.getElementById('modal-canteiro').style.display = 'flex';
+    
+    // 1. Carrega Chamada (Mantive igual)
+    document.getElementById('lista-chamada').innerHTML = listaAtivos.map(f => `
+        <div class="ponto-card">
+            <div class="ponto-info"><div>${f.nome}</div><div>${f.cargo}</div></div>
+            <div style="display:flex; gap:10px;">
+                <button class="btn-ponto btn-presenca" onclick="marcarPonto(${f.id}, 'PRESENTE')"><span class="material-icons-round">check</span></button>
+                <button class="btn-ponto btn-falta" onclick="marcarPonto(${f.id}, 'FALTA')"><span class="material-icons-round">close</span></button>
             </div>
         </div>
-    `;
+    `).join(''); 
     
-    // Limpa a div antiga de docs se houver, pois agora montamos tudo num layout só
-    document.getElementById('lista-docs').innerHTML = ''; 
+    // 2. Carrega Materiais do Banco (COM CATEGORIA AGORA)
+    listaMateriaisObra = await ipcRenderer.invoke('get-project-materials', id);
+    
+    // 3. Renderiza usando o filtro "TODOS" por padrão
+    filtrarCategoriaObra('TODOS');
+    
+    // 4. Carrega Histórico de Ponto
+    carregarHistoricoPonto();
 }
-        // --- FUNÇÃO DESLIGAR ATUALIZADA (V33.4) ---
+
+// --- NOVA LÓGICA DE FILTRO DENTRO DA OBRA ---
+function filtrarCategoriaObra(cat) {
+    catObraAtual = cat;
+    
+    // 1. Atualiza visual das pastas (Brilho verde)
+    const mapBtn = {'TODOS':'m-cat-todos', 'MATERIAIS':'m-cat-mat', 'FERRAMENTAS':'m-cat-fer', 'EPI':'m-cat-epi', 'LIMPEZA':'m-cat-limp', 'DIVERSOS':'m-cat-div'};
+    document.querySelectorAll('.cat-folder').forEach(b => b.classList.remove('active')); // Remove de todos
+    const activeId = mapBtn[cat];
+    if(document.getElementById(activeId)) document.getElementById(activeId).classList.add('active'); // Adiciona no atual
+
+    // 2. Filtra a lista
+    const filtrados = listaMateriaisObra.filter(m => cat === 'TODOS' ? true : m.categoria === cat);
+    
+    // 3. Desenha a Tabela
+    const tabela = document.getElementById('tb-materiais-obra');
+    if (filtrados.length === 0) {
+        tabela.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#666; padding:20px;">Nenhum item desta categoria na obra.</td></tr>';
+    } else {
+        tabela.innerHTML = filtrados.map(m => `
+            <tr>
+                <td style="font-weight:bold; color:white;">${m.nome_material}</td>
+                <td style="font-size:11px; color:#888;">${m.categoria || 'Geral'}</td>
+                <td style="color:var(--primary); font-weight:bold; font-size:14px;">${m.quantidade}</td>
+                <td><button class="action-icon" style="color:#666;" title="Ver Detalhes">👁️</button></td>
+            </tr>
+        `).join('');
+    }
+
+    // 4. Atualiza o Select de Consumo (Mostra apenas o que está filtrado ou tudo)
+    const select = document.getElementById('m-uso-mat');
+    select.innerHTML = '<option value="">Selecione para baixar...</option>' + 
+        filtrados.map(m => `<option value="${m.produto_id}">${m.nome_material} (Disp: ${m.quantidade})</option>`).join('');
+}
+        async function marcarPonto(funcId, status) { await ipcRenderer.invoke('add-ponto', {obraId: obraAtualId, funcId, status}); carregarHistoricoPonto(); }
+        async function carregarHistoricoPonto() { const h = await ipcRenderer.invoke('get-ponto-obra', obraAtualId); document.getElementById('tb-historico-ponto').innerHTML = h.map(i => `<tr><td>${new Date(i.data_registro).toLocaleDateString()}</td><td>${i.nome_funcionario}</td><td><span class="badge ${i.status==='PRESENTE'?'badge-pago':'badge-atrasado'}">${i.status}</span></td></tr>`).join(''); }
+        
+        // --- FUNÇÃO FICHA ATUALIZADA ---
+        async function abrirFicha(id, nome) {
+            document.getElementById('modal-nome-func').innerText = nome;
+            document.getElementById('modal-ficha').style.display = 'flex';
+            const d = await ipcRenderer.invoke('get-employee-details', id);
+            const timelineHTML = d.history.map(h => {
+                const dataFormatada = new Date(h.data_evento).toLocaleDateString('pt-BR');
+                return `<div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><span class="t-date">${dataFormatada}</span><div class="t-title">${h.tipo.toUpperCase()}</div><div class="t-desc">${h.descricao}</div></div></div>`;
+            }).join('');
+            const docsHTML = d.docs.length > 0 ? d.docs.map(f => `<div class="doc-card"><span class="material-icons-round">description</span><div>${f.nome_arquivo}</div></div>`).join('') : '<div style="color:#666; font-size:12px; font-style:italic;">Nenhum documento anexado.</div>';
+            document.getElementById('lista-timeline').innerHTML = `<div style="display:flex; gap:30px; height:100%;"><div style="flex:2; overflow-y:auto; padding-right:10px;"><h4 style="color:var(--primary); margin-bottom:20px;">📅 Linha do Tempo</h4><div class="timeline-container">${timelineHTML}</div></div><div style="flex:1; border-left:1px solid #333; padding-left:20px;"><h4 style="color:#888; margin-bottom:20px;">📂 Documentos</h4>${docsHTML}</div></div>`;
+            document.getElementById('lista-docs').innerHTML = ''; 
+        }
+
         async function confirmarDesligamento() { 
             const id = document.getElementById('deslig-id').value;
             const tipo = document.getElementById('deslig-tipo').value;
             const aviso = document.getElementById('deslig-aviso').value;
             const obs = document.getElementById('deslig-motivo').value;
             const pass = document.getElementById('deslig-pass').value;
-            
-            // Junta tudo num texto só para salvar no banco
             const motivoCompleto = `[${tipo}] - Aviso: ${aviso}. Obs: ${obs}`;
-
             const res = await ipcRenderer.invoke('terminate-employee', {id: id, motivo: motivoCompleto, adminPass: pass});
-            
-            if(res.sucesso) {
-                fecharModal('modal-desligamento'); 
-                carregarTudo();
-            } else {
-                alert(res.msg || "Erro na senha ou processo.");
-            }
+            if(res.sucesso) { fecharModal('modal-desligamento'); carregarTudo(); } else { alert(res.msg || "Erro na senha ou processo."); }
         }
-        function abrirDemissao(id, nome) { 
-            document.getElementById('deslig-nome').innerText = nome; 
-            document.getElementById('deslig-id').value = id; 
-            document.getElementById('modal-desligamento').style.display='flex'; 
-        }
+        function abrirDemissao(id, nome) { document.getElementById('deslig-nome').innerText = nome; document.getElementById('deslig-id').value = id; document.getElementById('modal-desligamento').style.display='flex'; }
 
         nav('dash');
+
+        function mNav(aba) {
+            document.querySelectorAll('[id^="mbody-"]').forEach(d => d.style.display = 'none');
+            document.querySelectorAll('.m-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('mbody-' + aba).style.display = (aba === 'rh' ? 'flex' : 'block');
+            document.getElementById('mtab-' + aba).classList.add('active');
+        }
+        async function registrarUsoMaterial() { alert("Função de consumo será integrada ao Financeiro Global no próximo passo!"); }
+        async function addGastoObra() { alert("Gasto lançado! Ele aparecerá no Financeiro da Matriz como 'Gasto de Obra'."); }
     </script>
 </body>
 </html>
