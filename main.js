@@ -248,3 +248,55 @@ ipcMain.handle('get-roles', async () => await dbQuery("SELECT * FROM job_roles O
 ipcMain.handle('add-role', async (e, d) => { await dbQuery("INSERT INTO job_roles (titulo, salario_base, bonificacao) VALUES ($1, $2, $3)", [d.titulo, d.base, d.bonus]); return true; });
 ipcMain.handle('edit-role', async (e, d) => { await dbQuery("UPDATE job_roles SET titulo=$1, salario_base=$2, bonificacao=$3 WHERE id=$4", [d.titulo, d.base, d.bonus, d.id]); return true; });
 ipcMain.handle('delete-role', async (e, id) => { await dbQuery("DELETE FROM job_roles WHERE id=$1", [id]); return { sucesso: true }; });
+// --- CONSUMO DE MATERIAL NO CANTEIRO (V52) ---
+ipcMain.handle('consume-material', async (e, d) => {
+    try {
+        // 1. Verifica saldo na obra
+        const mat = await dbQuery("SELECT * FROM project_materials WHERE obra_id=$1 AND produto_id=$2", [d.obraId, d.prodId]);
+        
+        if (mat.length === 0 || mat[0].quantidade < d.qtd) {
+            return { sucesso: false, msg: "Quantidade indisponível na obra!" };
+        }
+
+        // 2. Desconta do estoque da obra
+        await dbQuery("UPDATE project_materials SET quantidade = quantidade - $1 WHERE id=$2", [d.qtd, mat[0].id]);
+
+        // 3. Registra no Log (Para auditoria de gastos)
+        const produtoInfo = await dbQuery("SELECT nome FROM products WHERE id=$1", [d.prodId]);
+        const nomeProd = produtoInfo[0]?.nome || "Material";
+        
+        //registrarLog('OBRA', `Consumo na Obra ${d.obraId}: ${d.qtd}x ${nomeProd}`);
+
+        return { sucesso: true };
+    } catch (err) {
+        return { sucesso: false, msg: err.message };
+    }
+    
+});
+
+// --- NOVO: TIMELINE & NOTIFICAÇÕES (V60) ---
+
+// 1. Salvar Ocorrência (Treinamento, Acidente, etc)
+ipcMain.handle('add-employee-event', async (event, data) => {
+    try {
+        await dbQuery(`
+            INSERT INTO employee_history (employee_id, tipo, descricao, data_evento) 
+            VALUES ($1, $2, $3, NOW())
+        `, [data.empId, data.tipo, data.desc]);
+        return { sucesso: true };
+    } catch (err) { return { sucesso: false, msg: err.message }; }
+});
+
+// 2. Buscar Alertas (ASO Vencendo ou Férias Chegando)
+ipcMain.handle('get-notifications', async () => {
+    try {
+        // Busca quem tem ASO vencendo em 30 dias ou Férias em 15 dias
+        const alertas = await dbQuery(`
+            SELECT nome, aso_vencimento, ferias_inicio 
+            FROM employees 
+            WHERE (aso_vencimento <= NOW() + INTERVAL '30 days' AND status = 'ATIVO')
+               OR (ferias_inicio <= NOW() + INTERVAL '15 days' AND status = 'ATIVO')
+        `);
+        return alertas;
+    } catch (err) { return []; }
+});
