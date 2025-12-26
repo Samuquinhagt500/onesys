@@ -194,6 +194,37 @@ ipcMain.handle('get-project-materials', async (event, obraId) => {
 // DEMAIS HANDLERS (CLIENTES, RH, FINANCEIRO, CARGOS)
 ipcMain.handle('get-clients', async () => await dbQuery("SELECT * FROM clients ORDER BY nome ASC"));
 ipcMain.handle('save-client', async (e, d) => { if (d.id) await dbQuery("UPDATE clients SET nome=$1, documento=$2, email=$3, telefone=$4, endereco=$5 WHERE id=$6", [d.nome, d.doc, d.email, d.tel, d.end, d.id]); else await dbQuery("INSERT INTO clients (nome, documento, email, telefone, endereco, status) VALUES ($1, $2, $3, $4, $5, 'ATIVO')", [d.nome, d.doc, d.email, d.tel, d.end]); return true; });
+
+// --- SALVAR GASTO FINANCEIRO (GLOBAL E OBRA) - V50 ---
+ipcMain.handle('save-finance-entry', async (event, gasto) => {
+    try {
+        // Se for um gasto novo (sem ID), faz o INSERT
+        if (!gasto.id) {
+            await dbQuery(`
+                INSERT INTO finance_entries 
+                (tipo, descricao, valor, categoria_id, data_vencimento, status, data_pagamento) 
+                VALUES ($1, $2, $3, $4, $5, $6, $7)
+            `, [
+                gasto.tipo, 
+                gasto.descricao, 
+                gasto.valor, 
+                gasto.categoria_id || null, // Categoria pode ser nula se vier da obra
+                gasto.data_vencimento, 
+                gasto.status || 'PENDENTE', 
+                gasto.status === 'PAGO' ? gasto.data_vencimento : null // Se já pagou, data pagamento = data vencimento
+            ]);
+        } 
+        // Se tiver ID, seria um UPDATE (não estamos usando isso no canteiro ainda, mas fica pronto)
+        else {
+            // Lógica de update futura...
+        }
+        return true;
+    } catch (error) {
+        console.error("Erro ao salvar financeiro:", error);
+        return false;
+    }
+}); 
+
 ipcMain.handle('archive-client', async (e, id) => { await dbQuery("UPDATE clients SET status='INATIVO' WHERE id=$1", [id]); return true; });
 ipcMain.handle('add-ponto', async (e, d) => { const check = await dbQuery("SELECT * FROM project_attendance WHERE project_id=$1 AND employee_id=$2 AND data_registro=CURRENT_DATE", [d.obraId, d.funcId]); if (check.length > 0) { await dbQuery("UPDATE project_attendance SET status=$1 WHERE id=$2", [d.status, check[0].id]); } else { await dbQuery("INSERT INTO project_attendance (project_id, employee_id, status) VALUES ($1, $2, $3)", [d.obraId, d.funcId, d.status]); } return true; });
 ipcMain.handle('get-ponto-obra', async (e, obraId) => { return await dbQuery(`SELECT pa.*, e.nome as nome_funcionario FROM project_attendance pa JOIN employees e ON pa.employee_id = e.id WHERE pa.project_id = $1 ORDER BY pa.data_registro DESC`, [obraId]); });
