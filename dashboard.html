@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
 </head>
 <body>
-    <div class="sidebar">
+    <div class="sidebar no-print">
         <div class="logo-area"><span class="material-icons-round">grid_view</span> ONESYS</div>
         <button class="nav-btn" onclick="nav('dash')"><span class="material-icons-round">dashboard</span> Visão Geral</button>
         <button class="nav-btn" onclick="nav('fin')"><span class="material-icons-round">payments</span> Financeiro</button>
@@ -24,14 +24,12 @@
         
         <div id="tab-dash" class="hidden fade-in">
             <h2>Visão Geral</h2>
-            
             <div id="painel-alertas" class="glass-card hidden" style="border-left: 5px solid #ff5252; margin-bottom: 20px; background: rgba(255, 82, 82, 0.1);">
                 <h4 style="color:#ff5252; margin-bottom:10px; display:flex; align-items:center; gap:10px;">
                     <span class="material-icons-round">notifications_active</span> ATENÇÃO NECESSÁRIA
                 </h4>
                 <div id="lista-alertas-conteudo"></div>
             </div>
-
             <div class="glass-card"><h4>Saldo Disponível</h4><h1 id="dash-saldo" style="font-size:48px; color:var(--primary);">R$ 0,00</h1></div>
         </div>
 
@@ -105,7 +103,8 @@
 
         <div id="tab-obras" class="hidden fade-in">
             <h2>Gestão de Obras</h2>
-            <div class="glass-card">
+            
+            <div id="card-criar-obra" class="glass-card">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
                     <h4 id="titulo-form-obra" style="color:#888;">Iniciar Nova Obra</h4>
                     <button id="btn-cancelar-obra" class="btn-primary" style="width:auto; background:#333; display:none;" onclick="limparFormObra()">CANCELAR</button>
@@ -120,6 +119,7 @@
                     <button id="btn-salvar-obra" class="btn-primary full-width" onclick="salvarObra()">CRIAR OBRA</button>
                 </div>
             </div>
+            
             <div id="lista-obras-cards" style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:20px;"></div>
         </div>
 
@@ -141,20 +141,46 @@
             <h2>Configurações do Sistema</h2>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                 <div class="glass-card">
-                    <h4 style="color:var(--primary); margin-bottom:15px;">Acessos (Usuários)</h4>
-                    <input id="cfg-user" placeholder="Login / Usuário">
-                    <input id="cfg-pass" type="password" placeholder="Senha">
-                    <select id="cfg-cargo"><option value="admin">Administrador</option><option value="gerente">Mestre de Obras</option><option value="rh">RH</option><option value="financeiro">Financeiro</option><option value="engenharia">Engenheiro</option></select>
-                    <button class="btn-primary" onclick="salvarUsuario()">SALVAR USUÁRIO</button>
-                    <table style="margin-top:20px;"><thead><tr><th>Login</th><th>Cargo</th></tr></thead><tbody id="tb-users"></tbody></table>
-                </div>
-                <div class="glass-card">
-                    <h4 style="color:var(--primary); margin-bottom:15px;">Tabela de Cargos & Salários</h4>
+                    <h4 style="color:var(--primary); margin-bottom:15px;">👤 Minha Conta</h4>
+                    <div style="background:#161616; padding:15px; border-radius:8px; border:1px solid #333;">
+                        <p style="color:#888; font-size:12px;">Alterar minha senha de acesso</p>
+                        <input id="meu-nova-senha" type="password" placeholder="Nova Senha" style="margin-top:10px;">
+                        <button class="btn-primary" onclick="alterarMinhaSenha()" style="margin-top:10px;">ATUALIZAR SENHA</button>
+                    </div>
+                    
+                    <h4 style="color:var(--primary); margin-top:20px; margin-bottom:15px;">Cargos & Salários</h4>
                     <input type="hidden" id="role-id">
-                    <input id="role-titulo" placeholder="Título do Cargo (ex: Pedreiro)">
+                    <input id="role-titulo" placeholder="Título do Cargo">
                     <input id="role-salario" placeholder="Salário Base (R$)" oninput="formatarMoeda(this)">
                     <button class="btn-primary" id="btn-salvar-cargo" onclick="addRole()">ADICIONAR CARGO</button>
-                    <table style="margin-top:20px;"><thead><tr><th>Cargo</th><th>Salário</th><th>Ações</th></tr></thead><tbody id="tb-roles-config"></tbody></table>
+                    <table style="margin-top:10px;"><thead><tr><th>Cargo</th><th>Salário</th><th>Ações</th></tr></thead><tbody id="tb-roles-config"></tbody></table>
+                </div>
+
+                <div id="painel-admin-users" class="glass-card hidden">
+                    <h4 style="color:#ff5252; margin-bottom:15px;">🛡️ Gestão de Acessos (Admin)</h4>
+                    <div style="margin-bottom:20px; border-bottom:1px solid #333; padding-bottom:20px;">
+                        <label style="font-size:11px; color:#888;">Senha Padrão para Resets</label>
+                        <div style="display:flex; gap:10px;">
+                            <input id="cfg-padrao-pass" placeholder="Ex: mudar123">
+                            <button class="btn-primary" onclick="salvarSenhaPadrao()" style="width:auto;">SALVAR</button>
+                        </div>
+                    </div>
+                    <h4 style="color:var(--primary); margin-bottom:10px; font-size:12px;">+ ADICIONAR USUÁRIO</h4>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <input id="cfg-user" placeholder="Login" style="flex:1;">
+                        <input id="cfg-pass" type="password" placeholder="Senha" style="flex:1;">
+                        <select id="cfg-cargo" style="flex:1;">
+                            <option value="gerente">Mestre de Obras</option>
+                            <option value="rh">RH</option>
+                            <option value="engenharia">Engenheiro</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                        <button class="btn-primary" onclick="salvarUsuario()" style="width:auto;">CRIAR</button>
+                    </div>
+                    <table style="margin-top:20px;">
+                        <thead><tr><th>Login</th><th>Cargo</th><th style="text-align:right;">Ações</th></tr></thead>
+                        <tbody id="tb-users"></tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -184,10 +210,10 @@
             <div class="modal-body">
                 <div id="mbody-rh" class="fade-in" style="display: flex; gap: 20px; height: 100%;">
                     <div style="flex:1; border-right:1px solid #333; padding-right:20px; overflow-y: auto;">
-                        <h4 style="color:#888; margin-bottom:15px; position: sticky; top:0; background:#111; padding-bottom:10px;">👷 Chamada do Dia</h4><div id="lista-chamada"></div>
+                        <h4 style="color:#888; margin-bottom:15px; position: sticky; top:0; background:#111;">👷 Chamada do Dia</h4><div id="lista-chamada"></div>
                     </div>
                     <div style="flex:1; padding-left: 10px; overflow-y: auto;">
-                        <h4 style="color:#888; margin-bottom:15px; position: sticky; top:0; background:#111; padding-bottom:10px;">📅 Histórico de Ponto</h4><table id="tb-historico-ponto" style="margin-top:0;"></table>
+                        <h4 style="color:#888; margin-bottom:15px; position: sticky; top:0; background:#111;">📅 Histórico de Ponto</h4><table id="tb-historico-ponto"></table>
                     </div>
                 </div>
                 <div id="mbody-est" class="hidden fade-in" style="height: 100%;">
@@ -200,15 +226,15 @@
                         <div class="cat-folder" id="m-cat-div" onclick="filtrarCategoriaObra('DIVERSOS')"><span class="material-icons-round">category</span><small>Diversos</small></div>
                     </div>
                     <div style="display: flex; gap: 20px; height: calc(100% - 130px);"> 
-                        <div style="flex:2; overflow-y: auto;"><h4 style="color:var(--primary); margin-bottom:15px;">📦 Materiais Disponíveis na Obra</h4><table><thead><tr><th>Material</th><th>Categoria</th><th>Qtd</th><th>Ações</th></tr></thead><tbody id="tb-materiais-obra"></tbody></table></div>
+                        <div style="flex:2; overflow-y: auto;"><h4 style="color:var(--primary); margin-bottom:15px;">📦 Materiais Disponíveis</h4><table><thead><tr><th>Material</th><th>Categoria</th><th>Qtd</th><th>Ações</th></tr></thead><tbody id="tb-materiais-obra"></tbody></table></div>
                         <div style="flex:1;"><div style="background: #161616; padding: 20px; border-radius: 12px; border: 1px solid #333;"><h4 style="color:#888; margin-bottom:15px;">📝 Registrar Consumo</h4><label style="font-size:11px; color:#666;">O que foi usado?</label><select id="m-uso-mat" style="margin-bottom:15px;"><option value="">Selecione...</option></select><label style="font-size:11px; color:#666;">Quantidade</label><input type="number" id="m-uso-qtd" placeholder="Qtd usada"><button class="btn-primary" onclick="registrarUsoMaterial()">BAIXAR DO ESTOQUE</button></div></div>
                     </div>
                 </div>
                 <div id="mbody-fin" class="hidden fade-in" style="height: 100%; display: flex; flex-direction: column;">
                     <div style="display: flex; gap: 15px; margin-bottom: 20px;">
-                        <div class="glass-card" style="flex: 1; padding: 15px; text-align: center; border: 1px solid #333; margin-bottom: 0;"><div style="font-size: 11px; color: #888; text-transform: uppercase; font-weight: bold;">💰 Orçamento</div><div id="placar-orcamento" style="font-size: 20px; color: white; font-weight: bold; margin-top: 5px;">R$ 0,00</div></div>
-                        <div class="glass-card" style="flex: 1; padding: 15px; text-align: center; border: 1px solid #333; margin-bottom: 0;"><div style="font-size: 11px; color: #888; text-transform: uppercase; font-weight: bold;">💸 Total Gasto</div><div id="placar-gasto" style="font-size: 20px; color: #ff5252; font-weight: bold; margin-top: 5px;">R$ 0,00</div></div>
-                        <div class="glass-card" style="flex: 1; padding: 15px; text-align: center; border: 1px solid #333; margin-bottom: 0;"><div style="font-size: 11px; color: #888; text-transform: uppercase; font-weight: bold;">📊 Resultado</div><div id="placar-saldo" style="font-size: 20px; color: var(--primary); font-weight: bold; margin-top: 5px;">R$ 0,00</div></div>
+                        <div class="glass-card" style="flex:1; padding:15px; text-align:center; margin-bottom:0;"><div style="font-size:11px; color:#888;">ORÇAMENTO</div><div id="placar-orcamento" style="font-size:20px; color:white; font-weight:bold;">R$ 0,00</div></div>
+                        <div class="glass-card" style="flex:1; padding:15px; text-align:center; margin-bottom:0;"><div style="font-size:11px; color:#888;">GASTO TOTAL</div><div id="placar-gasto" style="font-size:20px; color:#ff5252; font-weight:bold;">R$ 0,00</div></div>
+                        <div class="glass-card" style="flex:1; padding:15px; text-align:center; margin-bottom:0;"><div style="font-size:11px; color:#888;">RESULTADO</div><div id="placar-saldo" style="font-size:20px; color:var(--primary); font-weight:bold;">R$ 0,00</div></div>
                     </div>
                     <h4 style="color:var(--primary); margin-bottom:10px;">Lançar Novo Gasto</h4>
                     <div class="grid-form" style="grid-template-columns: 2fr 1fr 1fr auto; margin-bottom: 20px; background: #161616; padding: 15px; border-radius: 12px;">
@@ -229,8 +255,9 @@
             <div class="modal-header">
                 <div style="display:flex; align-items:center; gap:10px;">
                     <h3 id="modal-nome-func" style="margin:0;">Ficha do Funcionário</h3>
-                    <button onclick="window.print()" style="background:none; border:1px solid #444; color:#888; border-radius:4px; cursor:pointer; padding:5px 10px; font-size:12px; display:flex; align-items:center; gap:5px;">
-                        <span class="material-icons-round" style="font-size:14px;">print</span> Imprimir
+                    <button onclick="window.print()" class="btn-imprimir-ficha" title="Imprimir Ficha">
+                        <span class="material-icons-round">print</span>
+                        <span>IMPRIMIR FICHA</span>
                     </button>
                 </div>
                 <button onclick="fecharModal('modal-ficha')" class="btn-close">X</button>
@@ -238,26 +265,31 @@
 
             <div class="modal-body" style="flex-direction: column; overflow-y: auto;">
                 
-                <div style="background: #161616; padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #333; flex-shrink: 0;">
-                    <h4 style="color:var(--primary); font-size:12px; margin-bottom:15px; text-transform:uppercase; letter-spacing:1px;">📝 Registrar Ocorrência / Treinamento</h4>
-                    <div style="display: flex; gap: 10px; align-items: center;">
-                        <select id="reg-evento-tipo" style="flex: 1; height: 40px; background: #222; color: white; border: 1px solid #444; border-radius: 6px; padding: 0 10px; outline: none;">
-                            <option value="TREINAMENTO">Treinamento (NRs)</option>
-                            <option value="ATESTADO">Atestado Médico</option>
-                            <option value="ACIDENTE">Incidente/Acidente</option>
-                            <option value="ADVERTENCIA">Advertência</option>
-                            <option value="GERAL">Outros / Anotação</option>
-                        </select>
-                        <input id="reg-evento-desc" placeholder="Detalhes da ocorrência..." style="flex: 2; height: 40px; background: #222; color: white; border: 1px solid #444; border-radius: 6px; padding: 0 10px; margin: 0; outline: none;">
-                        <button class="btn-primary" onclick="salvarOcorrencia()" style="width: auto; height: 40px; margin: 0; padding: 0 25px; border-radius: 6px;">
-                            LANÇAR
-                        </button>
+                <div class="print-only print-header-doc">
+                    <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px;">
+                        <div><h1 style="margin:0; font-size: 24px;">FICHA DO FUNCIONÁRIO</h1><p style="margin:2px 0;">OneSys - Gestão de Obras</p></div>
+                        <div style="text-align: right;"><p id="print-data-emissao" style="margin:0; font-size: 12px;"></p></div>
+                    </div>
+                    <div class="print-grid">
+                        <div><strong>NOME:</strong> <span id="p-nome"></span></div><div><strong>CARGO:</strong> <span id="p-cargo"></span></div>
+                        <div><strong>CPF:</strong> <span id="p-cpf"></span></div><div><strong>RG:</strong> <span id="p-rg"></span></div>
+                        <div><strong>NIS/PIS:</strong> <span id="p-nis"></span></div><div><strong>NASCIMENTO:</strong> <span id="p-nasc"></span></div>
+                        <div><strong>CONTATO:</strong> <span id="p-tel"></span></div><div><strong>E-MAIL:</strong> <span id="p-email"></span></div>
                     </div>
                 </div>
 
-                <div id="lista-timeline" style="flex: 1;">
+                <div class="no-print" style="background: #161616; padding: 20px; border-radius: 12px; margin-bottom: 20px; border: 1px solid #333; flex-shrink: 0;">
+                    <h4 style="color:var(--primary); font-size:12px; margin-bottom:15px; text-transform:uppercase; letter-spacing:1px;">📝 Registrar Ocorrência / Treinamento</h4>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <select id="reg-evento-tipo" style="flex: 1; height: 40px; background: #222; color: white; border: 1px solid #444; border-radius: 6px; padding: 0 10px; outline: none;">
+                            <option value="TREINAMENTO">Treinamento (NRs)</option><option value="ATESTADO">Atestado Médico</option><option value="ACIDENTE">Incidente/Acidente</option><option value="ADVERTENCIA">Advertência</option><option value="GERAL">Outros / Anotação</option>
+                        </select>
+                        <input id="reg-evento-desc" placeholder="Detalhes da ocorrência..." style="flex: 2; height: 40px; background: #222; color: white; border: 1px solid #444; border-radius: 6px; padding: 0 10px; margin: 0; outline: none;">
+                        <button class="btn-primary" onclick="salvarOcorrencia()" style="width: auto; height: 40px; margin: 0; padding: 0 25px; border-radius: 6px;">LANÇAR</button>
                     </div>
+                </div>
 
+                <div id="lista-timeline" style="flex: 1;"></div>
             </div>
         </div>
     </div>
@@ -281,6 +313,18 @@
         </div>
     </div>
 
+    <div id="modal-data-ocorrencia" class="modal-overlay" style="z-index: 10000;">
+        <div class="modal-content modal-small" style="max-width: 300px; text-align: center;">
+            <h3 style="color:var(--primary); margin-bottom:15px;">📅 Quando aconteceu?</h3>
+            <p style="color:#888; font-size:12px; margin-bottom:15px;">Confirme a data para o registro na linha do tempo.</p>
+            <input type="date" id="reg-data-confirm" style="width: 100%; margin-bottom: 20px; text-align: center; font-size: 16px;">
+            <div style="display: flex; gap: 10px; justify-content: center;">
+                <button onclick="fecharModal('modal-data-ocorrencia')" style="background:none; border:1px solid #444; color:#888; padding: 10px 20px; border-radius: 6px; cursor: pointer;">Cancelar</button>
+                <button class="btn-primary" onclick="confirmarLancamentoOcorrencia()" style="width: auto;">CONFIRMAR</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const { ipcRenderer } = require('electron');
         
@@ -290,7 +334,7 @@
         let listaMateriaisObra = []; 
         let catObraAtual = 'TODOS';
         let categoriaEstoqueAtual = 'TODOS';
-        let idFichaAtual = null; // Variável para controlar de quem é a ficha aberta
+        let idFichaAtual = null; 
 
         function formatarMoeda(c){ let v=c.value.replace(/\D/g,''); v=(v/100).toFixed(2).toString().replace('.',','); v=v.replace(/(\d)(?=(\d{3})+(?!\d))/g,'$1.'); c.value=v; }
         function formatarNome(c){ let p=c.value.toLowerCase().split(' '); for(let i=0;i<p.length;i++) if(p[i]) p[i]=p[i][0].toUpperCase()+p[i].slice(1); c.value=p.join(' '); }
@@ -313,19 +357,20 @@
         async function carregarTudo() {
             try {
                 const user = await ipcRenderer.invoke('get-user-info');
-                if (user) {
-                    const cardCadastroObra = document.querySelector('#tab-obras .glass-card');
-                    if (user.cargo === 'gerente') {
-                        ['fin', 'rh', 'clientes', 'estoque', 'config', 'dash'].forEach(id => { const btn = document.querySelector(`button[onclick="nav('${id}')"]`); if (btn) btn.style.display = 'none'; });
-                        if (cardCadastroObra) cardCadastroObra.style.display = 'none';
-                        if (!document.getElementById('tab-dash').classList.contains('hidden')) nav('obras');
-                    } 
-                    else if (user.cargo === 'engenharia') {
-                        ['fin', 'rh', 'clientes', 'config', 'dash'].forEach(id => { const btn = document.querySelector(`button[onclick="nav('${id}')"]`); if (btn) btn.style.display = 'none'; });
-                        if (cardCadastroObra) cardCadastroObra.style.display = 'none';
-                        if (!document.getElementById('tab-dash').classList.contains('hidden')) nav('obras');
-                    }
+                // Bloqueios por Cargo
+                if (user.cargo === 'gerente' || user.cargo === 'engenharia') {
+                    ['fin', 'rh', 'clientes', 'estoque', 'config', 'dash'].forEach(id => { 
+                        const btn = document.querySelector(`button[onclick="nav('${id}')"]`); 
+                        if (btn) btn.style.display = 'none'; 
+                    });
+                    
+                    // CORREÇÃO: Esconde o card de "Iniciar Nova Obra" usando o novo ID
+                    const cardNovaObra = document.getElementById('card-criar-obra');
+                    if(cardNovaObra) cardNovaObra.style.display = 'none';
+
+                    if (!document.getElementById('tab-dash').classList.contains('hidden')) nav('obras');
                 }
+                
                 const fin = await ipcRenderer.invoke('get-finance');
                 const cats = await ipcRenderer.invoke('get-categories');
                 if(document.getElementById('dash-saldo')) document.getElementById('dash-saldo').innerText = `R$ ${fin.saldo.toFixed(2)}`;
@@ -338,9 +383,11 @@
                 if(document.getElementById('lista-obras-cards')) { document.getElementById('lista-obras-cards').innerHTML = obras.map(o => ` <div class="glass-card" style="border-left: 5px solid var(--primary); position: relative;"> ${user.cargo !== 'gerente' && user.cargo !== 'engenharia' ? ` <div style="position:absolute; top:15px; right:15px;"> <button class="action-icon" onclick="editarObra(event, ${o.id})">✎</button> </div> ` : ''} <h3 style="color:white; cursor:pointer;" onclick="abrirCanteiro(${o.id}, '${o.nome_obra}')">${o.nome_obra}</h3> <p style="font-size:12px; color:#888; margin:5px 0;">Cliente: ${o.cliente_nome || 'N/D'}</p> <p style="font-size:11px; color:var(--primary);">Mestre: ${o.mestre_nome || 'N/D'}</p> <button class="btn-primary" style="margin-top:10px; background:#222; color:var(--primary); border:1px solid var(--primary);" onclick="abrirCanteiro(${o.id}, '${o.nome_obra}')">ACESSAR CANTEIRO</button> </div> `).join(''); }
                 const func = await ipcRenderer.invoke('get-employees'); listaAtivos = func.filter(f => f.status === 'ATIVO'); listaArquivados = func.filter(f => f.status === 'INATIVO'); if(document.getElementById('rh-total-count-ativos')) document.getElementById('rh-total-count-ativos').innerText = listaAtivos.length; if(document.getElementById('rh-total-count-arquivados')) document.getElementById('rh-total-count-arquivados').innerText = listaArquivados.length; filtrarFuncionarios(); renderizarArquivados();
                 const todosClientes = await ipcRenderer.invoke('get-clients'); clientesAtivos = todosClientes.filter(c => !c.status || c.status === 'ATIVO'); clientesInativos = todosClientes.filter(c => c.status === 'INATIVO'); if(document.getElementById('cli-total-ativos')) document.getElementById('cli-total-ativos').innerText = clientesAtivos.length; if(document.getElementById('cli-total-inativos')) document.getElementById('cli-total-inativos').innerText = clientesInativos.length; if(document.getElementById('ob-cliente-select')) document.getElementById('ob-cliente-select').innerHTML = '<option value="">Selecione o Cliente...</option>' + clientesAtivos.map(c=>`<option value="${c.id}">${c.nome}</option>`).join(''); renderizarClientes();
-                carregarCargos(); const sysUsers = await ipcRenderer.invoke('get-system-users'); if(document.getElementById('tb-users')) document.getElementById('tb-users').innerHTML = sysUsers.map(u=>`<tr><td>${u.username}</td><td>${u.cargo}</td></tr>`).join('');
+                carregarCargos();
                 
-                verificarAlertas(); // Verifica notificações ao carregar
+                // Funções Finais (Login e Alertas)
+                carregarConfigUsers(); 
+                verificarAlertas(); 
             } catch (e) { console.error("Erro ao carregar dados:", e); }
         }
 
@@ -370,31 +417,40 @@
         async function confirmarTransferencia() { const prodId = document.getElementById('transf-id-prod').value; const obraId = document.getElementById('transf-obra').value; const qtd = document.getElementById('transf-qtd').value; if(!obraId || !qtd) return alert("Selecione Obra e Quantidade!"); const res = await ipcRenderer.invoke('transfer-product', {prodId, obraId, qtd: parseInt(qtd)}); if(res.sucesso) { alert("Transferência realizada com sucesso!"); fecharModal('modal-transferencia'); carregarTudo(); } else { alert("Erro: " + (res.msg || "Falha na transferência")); } }
         function filtrarCategoria(cat) { categoriaEstoqueAtual = cat; document.querySelectorAll('.cat-folder').forEach(b => b.classList.remove('active')); const mapBtn = {'TODOS':'tab-cat-todos', 'MATERIAIS':'tab-cat-mat', 'FERRAMENTAS':'tab-cat-fer', 'EPI':'tab-cat-epi', 'LIMPEZA':'tab-cat-limp', 'DIVERSOS':'tab-cat-div'}; const activeId = mapBtn[cat] || 'tab-cat-todos'; document.getElementById(activeId).classList.add('active'); filtrarEstoque(); }
         function filtrarEstoque() { const termo = document.getElementById('est-busca').value.toLowerCase(); const filtrados = listaEstoque.filter(p => { const matchTexto = p.nome.toLowerCase().includes(termo); const matchCat = categoriaEstoqueAtual === 'TODOS' ? true : (p.categoria === categoriaEstoqueAtual); return matchTexto && matchCat; }); document.getElementById('tb-estoque').innerHTML = filtrados.map(p => { const total = p.quantidade * p.valor_unitario; return `<tr><td><b>${p.nome}</b></td><td>${p.categoria || '-'}</td><td>${p.quantidade}</td><td>R$ ${parseFloat(p.valor_unitario).toFixed(2)}</td><td style="color:var(--primary);">R$ ${total.toFixed(2)}</td><td><button class="action-icon" onclick="abrirTransferencia(${p.id})" title="Transferir para Obra" style="border:none; background:none; color:#FFC107;"><span class="material-icons-round">local_shipping</span></button><button class="action-icon" onclick="editarProduto(${p.id})" style="border:none; background:none; color:var(--primary);">✎</button><button class="action-icon" onclick="deletarProduto(${p.id})" style="border:none; background:none; color:#ff5252;">🗑️</button></td></tr>`; }).join(''); }
-        function filtrarFuncionarios() { const termo = document.getElementById('rh-busca').value.toLowerCase(); document.getElementById('tb-rh-ativos').innerHTML = listaAtivos.filter(f => f.nome.toLowerCase().includes(termo)).map(f => `<tr><td>${f.nome}</td><td>${f.cargo}</td><td><button class="action-icon" onclick="abrirFicha(${f.id}, '${f.nome}')" title="Ver Ficha"><span class="material-icons-round">description</span></button><button class="action-icon" onclick="abrirDemissao(${f.id}, '${f.nome}')" title="Desligar" style="color:#ff5252;"><span class="material-icons-round">person_remove</span></button></td></tr>`).join(''); }
+        
+        function filtrarFuncionarios() { 
+            const termo = document.getElementById('rh-busca').value.toLowerCase(); 
+            document.getElementById('tb-rh-ativos').innerHTML = listaAtivos.filter(f => f.nome.toLowerCase().includes(termo)).map(f => `
+                <tr>
+                    <td style="width: 40%; font-weight: bold; color: white;">
+                        <div style="display:flex; align-items:center; gap:10px;"><span class="material-icons-round" style="color:#666; font-size:20px;">account_circle</span> ${f.nome}</div>
+                    </td>
+                    <td style="width: 40%;"><span class="cargo-tag" style="background:#222; padding:4px 10px; border-radius:4px; font-size:11px; color:var(--primary);">${f.cargo}</span></td>
+                    <td style="width: 20%; text-align: right;">
+                        <button class="action-icon" onclick="abrirFicha(${f.id}, '${f.nome}')" title="Ver Ficha"><span class="material-icons-round">description</span></button>
+                        <button class="action-icon" onclick="abrirDemissao(${f.id}, '${f.nome}')" title="Desligar" style="color:#ff5252;"><span class="material-icons-round">person_remove</span></button>
+                    </td>
+                </tr>
+            `).join(''); 
+        }
         function renderizarArquivados() { document.getElementById('tb-rh-arquivados').innerHTML=listaArquivados.map(f=>`<tr><td>${f.nome}</td><td>${f.desligamento_motivo}</td><td>${f.desligamento_data}</td></tr>`).join(''); }
         function alternarVisaoRH(t) { document.getElementById('rh-ativa-conteudo').className = t==='ativa'?'':'hidden'; document.getElementById('rh-arquivados-conteudo').className = t==='arquivados'?'':'hidden'; }
         function mostrarFormRH() { document.getElementById('rh-visao-geral').classList.add('hidden'); document.getElementById('rh-formulario').classList.remove('hidden'); document.getElementById('rh-nome').value = ''; document.getElementById('rh-cpf').value = ''; document.getElementById('rh-rg').value = ''; document.getElementById('rh-nis').value = ''; document.getElementById('rh-nasc').value = ''; document.getElementById('rh-tel').value = ''; document.getElementById('rh-email').value = ''; document.getElementById('rh-end').value = ''; document.getElementById('rh-cargo-select').value = ''; document.getElementById('rh-doc-inicial').value = ''; }
         function voltarRH() { document.getElementById('rh-formulario').classList.add('hidden'); document.getElementById('rh-visao-geral').classList.remove('hidden'); }
-        async function addRhFull() { const fi = document.getElementById('rh-doc-inicial'); const readFile = (f) => new Promise(res => { const r = new FileReader(); r.onload = () => res({name:f.name, content:r.result, type:f.type}); r.readAsDataURL(f); }); const docs = fi.files.length > 0 ? await Promise.all(Array.from(fi.files).map(readFile)) : []; const d = { nome: document.getElementById('rh-nome').value, cpf: document.getElementById('rh-cpf').value, nis: document.getElementById('rh-nis').value, nasc: document.getElementById('rh-nasc').value, tel: document.getElementById('rh-tel').value, email: document.getElementById('rh-email').value, end: document.getElementById('rh-end').value, cargo: document.getElementById('rh-cargo-select').value, sal: 0, docs }; await ipcRenderer.invoke('add-employee-full', d); voltarRH(); carregarTudo(); }
-        async function salvarUsuario() { const d = { user: document.getElementById('cfg-user').value, pass: document.getElementById('cfg-pass').value, cargo: document.getElementById('cfg-cargo').value }; await ipcRenderer.invoke('save-user', d); carregarTudo(); }
-
-        // --- FUNÇÕES DE CANTEIRO E INTELIGÊNCIA ---
+        async function addRhFull() { const fi = document.getElementById('rh-doc-inicial'); const readFile = (f) => new Promise(res => { const r = new FileReader(); r.onload = () => res({name:f.name, content:r.result, type:f.type}); r.readAsDataURL(f); }); const docs = fi.files.length > 0 ? await Promise.all(Array.from(fi.files).map(readFile)) : []; const d = { nome: document.getElementById('rh-nome').value, cpf: document.getElementById('rh-cpf').value, nis: document.getElementById('rh-nis').value, nasc: document.getElementById('rh-nasc').value, tel: document.getElementById('rh-tel').value, email: document.getElementById('rh-email').value, end: document.getElementById('rh-end').value, cargo: document.getElementById('rh-cargo-select').value, sal: 0, docs, rg: document.getElementById('rh-rg').value }; await ipcRenderer.invoke('add-employee-full', d); voltarRH(); carregarTudo(); }
+        async function salvarUsuario() { const d = { user: document.getElementById('cfg-user').value, pass: document.getElementById('cfg-pass').value, cargo: document.getElementById('cfg-cargo').value }; await ipcRenderer.invoke('save-user', d); carregarConfigUsers(); } 
 
         async function abrirCanteiro(id, nome) {
             obraAtualId = id; 
             document.getElementById('canteiro-titulo').innerText = `🚧 Canteiro: ${nome}`; 
             document.getElementById('modal-canteiro').style.display = 'flex';
-            
-            // 1. Carrega Chamada (Design Organizado)
             document.getElementById('lista-chamada').innerHTML = listaAtivos.map(f => `
                 <div class="ponto-card" style="padding: 12px 20px;">
                     <div class="ponto-info" style="display: flex; flex-direction: column; gap: 6px;">
                         <div style="font-weight: bold; color: white; font-size: 14px; letter-spacing: 0.3px;">${f.nome}</div>
                         <div style="display: flex; align-items: center; gap: 8px;">
                             <span class="cargo-tag">${f.cargo}</span>
-                            <button onclick="abrirFicha(${f.id}, '${f.nome}')" class="btn-ficha-mini">
-                                <span class="material-icons-round">description</span> FICHA
-                            </button>
+                            <button onclick="abrirFicha(${f.id}, '${f.nome}')" class="btn-ficha-mini"><span class="material-icons-round">description</span> FICHA</button>
                         </div>
                     </div>
                     <div style="display: flex; gap: 8px;">
@@ -403,103 +459,98 @@
                     </div>
                 </div>
             `).join(''); 
-            
             listaMateriaisObra = await ipcRenderer.invoke('get-project-materials', id);
             filtrarCategoriaObra('TODOS');
             carregarHistoricoPonto();
             await carregarFinanceiroObra();
         }
-
         async function marcarPonto(funcId, status) { await ipcRenderer.invoke('add-ponto', {obraId: obraAtualId, funcId, status}); carregarHistoricoPonto(); }
         async function carregarHistoricoPonto() { const h = await ipcRenderer.invoke('get-ponto-obra', obraAtualId); document.getElementById('tb-historico-ponto').innerHTML = h.map(i => `<tr><td>${new Date(i.data_registro).toLocaleDateString()}</td><td>${i.nome_funcionario}</td><td><span class="badge ${i.status==='PRESENTE'?'badge-pago':'badge-atrasado'}">${i.status}</span></td></tr>`).join(''); }
-
         function filtrarCategoriaObra(cat) {
-            catObraAtual = cat;
-            document.querySelectorAll('.cat-folder').forEach(b => b.classList.remove('active')); 
-            const mapBtn = {'TODOS':'m-cat-todos', 'MATERIAIS':'m-cat-mat', 'FERRAMENTAS':'m-cat-fer', 'EPI':'m-cat-epi', 'LIMPEZA':'m-cat-limp', 'DIVERSOS':'m-cat-div'};
-            const activeId = mapBtn[cat]; if(document.getElementById(activeId)) document.getElementById(activeId).classList.add('active'); 
-            const filtrados = listaMateriaisObra.filter(m => cat === 'TODOS' ? true : m.categoria === cat);
-            const tabela = document.getElementById('tb-materiais-obra');
+            catObraAtual = cat; document.querySelectorAll('.cat-folder').forEach(b => b.classList.remove('active')); const mapBtn = {'TODOS':'m-cat-todos', 'MATERIAIS':'m-cat-mat', 'FERRAMENTAS':'m-cat-fer', 'EPI':'m-cat-epi', 'LIMPEZA':'m-cat-limp', 'DIVERSOS':'m-cat-div'}; const activeId = mapBtn[cat]; if(document.getElementById(activeId)) document.getElementById(activeId).classList.add('active'); 
+            const filtrados = listaMateriaisObra.filter(m => cat === 'TODOS' ? true : m.categoria === cat); const tabela = document.getElementById('tb-materiais-obra');
             if (filtrados.length === 0) { tabela.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#666; padding:20px;">Nenhum item desta categoria na obra.</td></tr>'; } 
             else { tabela.innerHTML = filtrados.map(m => `<tr><td style="font-weight:bold; color:white;">${m.nome_material}</td><td style="font-size:11px; color:#888;">${m.categoria || 'Geral'}</td><td style="color:var(--primary); font-weight:bold; font-size:14px;">${m.quantidade}</td><td><button class="action-icon" style="color:#666;" title="Ver Detalhes">👁️</button></td></tr>`).join(''); }
-            const select = document.getElementById('m-uso-mat');
-            select.innerHTML = '<option value="">Selecione para baixar...</option>' + filtrados.map(m => `<option value="${m.produto_id}">${m.nome_material} (Disp: ${m.quantidade})</option>`).join('');
+            const select = document.getElementById('m-uso-mat'); select.innerHTML = '<option value="">Selecione para baixar...</option>' + filtrados.map(m => `<option value="${m.produto_id}">${m.nome_material} (Disp: ${m.quantidade})</option>`).join('');
         }
-        
-        async function registrarUsoMaterial() {
-            const prodId = document.getElementById('m-uso-mat').value;
-            const qtd = document.getElementById('m-uso-qtd').value;
-            if (!prodId || !qtd || qtd <= 0) return alert("Selecione o material e uma quantidade válida.");
-            const res = await ipcRenderer.invoke('consume-material', { obraId: obraAtualId, prodId: prodId, qtd: parseInt(qtd) });
-            if (res.sucesso) { alert("Baixa realizada com sucesso!"); document.getElementById('m-uso-qtd').value = ''; abrirCanteiro(obraAtualId, document.getElementById('canteiro-titulo').innerText.replace('🚧 Canteiro: ', '')); } else { alert("Erro: " + res.msg); }
-        }
-
-        async function addGastoObra() {
-            const desc = document.getElementById('m-fin-desc').value;
-            const valor = document.getElementById('m-fin-val').value.replace(/\./g,'').replace(',','.');
-            const data = document.getElementById('m-fin-data').value;
-            if(!desc || !valor || !data) return alert("Preencha todos os campos do gasto!");
-            const gasto = { tipo: 'DESPESA', descricao: `[OBRA: ${obraAtualId}] ${desc}`, valor: parseFloat(valor), data_vencimento: data, status: 'PAGO', obra_id: obraAtualId };
-            const res = await ipcRenderer.invoke('save-finance-entry', gasto);
-            if(res) { alert("Gasto lançado com sucesso!"); document.getElementById('m-fin-desc').value = ''; document.getElementById('m-fin-val').value = ''; document.getElementById('m-fin-data').value = ''; await carregarFinanceiroObra(); carregarTudo(); }
-        }
-
+        async function registrarUsoMaterial() { const prodId = document.getElementById('m-uso-mat').value; const qtd = document.getElementById('m-uso-qtd').value; if (!prodId || !qtd || qtd <= 0) return alert("Selecione o material e uma quantidade válida."); const res = await ipcRenderer.invoke('consume-material', { obraId: obraAtualId, prodId: prodId, qtd: parseInt(qtd) }); if (res.sucesso) { alert("Baixa realizada com sucesso!"); document.getElementById('m-uso-qtd').value = ''; abrirCanteiro(obraAtualId, document.getElementById('canteiro-titulo').innerText.replace('🚧 Canteiro: ', '')); } else { alert("Erro: " + res.msg); } }
+        async function addGastoObra() { const desc = document.getElementById('m-fin-desc').value; const valor = document.getElementById('m-fin-val').value.replace(/\./g,'').replace(',','.'); const data = document.getElementById('m-fin-data').value; if(!desc || !valor || !data) return alert("Preencha todos os campos do gasto!"); const gasto = { tipo: 'DESPESA', descricao: `[OBRA: ${obraAtualId}] ${desc}`, valor: parseFloat(valor), data_vencimento: data, status: 'PAGO', obra_id: obraAtualId }; const res = await ipcRenderer.invoke('save-finance-entry', gasto); if(res) { alert("Gasto lançado com sucesso!"); document.getElementById('m-fin-desc').value = ''; document.getElementById('m-fin-val').value = ''; document.getElementById('m-fin-data').value = ''; await carregarFinanceiroObra(); carregarTudo(); } }
         async function carregarFinanceiroObra() {
-            const todasEntradas = await ipcRenderer.invoke('get-finance');
-            const gastosObra = todasEntradas.lista.filter(f => f.descricao.includes(`[OBRA: ${obraAtualId}]`));
-            const obra = listaObrasAtivas.find(o => o.id === obraAtualId);
-            const orcamentoTotal = obra ? parseFloat(obra.orcamento) : 0;
-            let totalGasto = 0;
-            gastosObra.forEach(g => totalGasto += parseFloat(g.valor));
-            const saldo = orcamentoTotal - totalGasto;
-            document.getElementById('placar-orcamento').innerText = `R$ ${orcamentoTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-            document.getElementById('placar-gasto').innerText = `R$ ${totalGasto.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-            const elSaldo = document.getElementById('placar-saldo');
-            elSaldo.innerText = `R$ ${saldo.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-            if (saldo >= 0) { elSaldo.style.color = "var(--primary)"; elSaldo.innerHTML += " <small style='font-size:10px; color:#666;'>(NO AZUL)</small>"; } 
-            else { elSaldo.style.color = "#ff5252"; elSaldo.innerHTML += " <small style='font-size:10px; color:#fff;'>(ESTOUROU)</small>"; }
+            const todasEntradas = await ipcRenderer.invoke('get-finance'); const gastosObra = todasEntradas.lista.filter(f => f.descricao.includes(`[OBRA: ${obraAtualId}]`)); const obra = listaObrasAtivas.find(o => o.id === obraAtualId); const orcamentoTotal = obra ? parseFloat(obra.orcamento) : 0; let totalGasto = 0; gastosObra.forEach(g => totalGasto += parseFloat(g.valor)); const saldo = orcamentoTotal - totalGasto;
+            document.getElementById('placar-orcamento').innerText = `R$ ${orcamentoTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`; document.getElementById('placar-gasto').innerText = `R$ ${totalGasto.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`; const elSaldo = document.getElementById('placar-saldo'); elSaldo.innerText = `R$ ${saldo.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            if (saldo >= 0) { elSaldo.style.color = "var(--primary)"; elSaldo.innerHTML += " <small style='font-size:10px; color:#666;'>(NO AZUL)</small>"; } else { elSaldo.style.color = "#ff5252"; elSaldo.innerHTML += " <small style='font-size:10px; color:#fff;'>(ESTOUROU)</small>"; }
             document.getElementById('tb-financeiro-obra').innerHTML = gastosObra.map(g => `<tr><td style="color:#888; font-size:12px;">${new Date(g.data_vencimento).toLocaleDateString()}</td><td>${g.descricao.replace(`[OBRA: ${obraAtualId}] `, '')}</td><td style="color:#ff5252; font-weight:bold;">- R$ ${parseFloat(g.valor).toFixed(2)}</td></tr>`).join('');
         }
-
         function mNav(aba) { document.querySelectorAll('[id^="mbody-"]').forEach(d => d.style.display = 'none'); document.querySelectorAll('.m-tab').forEach(t => t.classList.remove('active')); document.getElementById('mbody-' + aba).style.display = (aba === 'rh' ? 'flex' : 'block'); document.getElementById('mtab-' + aba).classList.add('active'); }
 
         async function abrirFicha(id, nome) { 
-            idFichaAtual = id; // SALVA O ID PARA O LANÇAMENTO
+            idFichaAtual = id; 
             document.getElementById('modal-nome-func').innerText = nome; 
             document.getElementById('modal-ficha').style.display = 'flex'; 
+            
             const d = await ipcRenderer.invoke('get-employee-details', id); 
-            const timelineHTML = d.history.map(h => { const dataFormatada = new Date(h.data_evento).toLocaleDateString('pt-BR'); return `<div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><span class="t-date">${dataFormatada}</span><div class="t-title">${h.tipo.toUpperCase()}</div><div class="t-desc">${h.descricao}</div></div></div>`; }).join(''); 
-            document.getElementById('lista-timeline').innerHTML = `<div style="display:flex; gap:30px; height:100%;"><div style="flex:1; overflow-y:auto; padding-right:10px;"><h4 style="color:var(--primary); margin-bottom:20px;">📅 Linha do Tempo</h4><div class="timeline-container">${timelineHTML}</div></div></div>`; 
-        }
-
-        async function salvarOcorrencia() {
-            if(!idFichaAtual) return alert("Erro: ID do funcionário não encontrado.");
-            const tipo = document.getElementById('reg-evento-tipo').value;
-            const desc = document.getElementById('reg-evento-desc').value;
-            if(!desc) return alert("Descreva a ocorrência!");
-            const res = await ipcRenderer.invoke('add-employee-event', { empId: idFichaAtual, tipo, desc });
-            if(res.sucesso) { alert("Registro salvo na linha do tempo!"); document.getElementById('reg-evento-desc').value = ''; abrirFicha(idFichaAtual, document.getElementById('modal-nome-func').innerText); } else { alert("Erro ao salvar."); }
-        }
-
-        async function verificarAlertas() {
-            const user = await ipcRenderer.invoke('get-user-info');
-            if (['rh', 'gerente', 'admin'].includes(user.cargo)) {
-                const alertas = await ipcRenderer.invoke('get-notifications');
-                const painel = document.getElementById('painel-alertas');
-                if (alertas && alertas.length > 0) {
-                    painel.classList.remove('hidden');
-                    document.getElementById('lista-alertas-conteudo').innerHTML = alertas.map(a => `
-                        <div style="background: rgba(0,0,0,0.2); padding: 8px; border-radius: 4px; margin-bottom: 5px; color: white; font-size: 12px; display:flex; justify-content:space-between;">
-                            <span>⚠️ <b>${a.nome}</b></span>
-                            <span>${a.aso_vencimento ? 'Exame Vencendo: ' + new Date(a.aso_vencimento).toLocaleDateString() : ''} ${a.ferias_inicio ? 'Férias Chegando: ' + new Date(a.ferias_inicio).toLocaleDateString() : ''}</span>
-                        </div>
-                    `).join('');
-                } else { painel.classList.add('hidden'); }
+            if (d && d.info) {
+                document.getElementById('p-nome').innerText = d.info.nome || nome; document.getElementById('p-cargo').innerText = d.info.cargo || '---'; document.getElementById('p-cpf').innerText = d.info.cpf || '---'; document.getElementById('p-rg').innerText = d.info.rg || '---'; document.getElementById('p-nis').innerText = d.info.nis || '---'; document.getElementById('p-nasc').innerText = d.info.data_nascimento ? new Date(d.info.data_nascimento).toLocaleDateString() : '---'; document.getElementById('p-tel').innerText = d.info.telefone || '---'; document.getElementById('p-email').innerText = d.info.email || '---'; document.getElementById('print-data-emissao').innerText = "Emitido em: " + new Date().toLocaleString();
             }
+            let timelineHTML = "";
+            if (d.history && d.history.length > 0) {
+                timelineHTML = d.history.map(h => { const dataFormatada = new Date(h.data_evento).toLocaleDateString('pt-BR'); return `<div class="timeline-item"><div class="timeline-dot"></div><div class="timeline-content"><span class="t-date">${dataFormatada}</span><div class="t-title">${h.tipo.toUpperCase()}</div><div class="t-desc">${h.descricao}</div></div></div>`; }).join(''); 
+            } else { timelineHTML = `<div style="color:#666; padding:20px; font-style:italic;">Nenhum registro encontrado na linha do tempo.</div>`; }
+            document.getElementById('lista-timeline').innerHTML = `<h4 style="color:var(--primary); margin-bottom:20px;" class="no-print">📅 LINHA DO TEMPO</h4><div class="timeline-container">${timelineHTML}</div>`; 
+        }
+
+        // Lógica de Ocorrência
+        function salvarOcorrencia() {
+            if(!idFichaAtual) return alert("Erro: ID não encontrado.");
+            const desc = document.getElementById('reg-evento-desc').value;
+            if(!desc) return alert("Descreva a ocorrência antes de continuar!");
+            document.getElementById('reg-data-confirm').valueAsDate = new Date();
+            document.getElementById('modal-data-ocorrencia').style.display = 'flex';
+        }
+        async function confirmarLancamentoOcorrencia() {
+            const tipo = document.getElementById('reg-evento-tipo').value; const desc = document.getElementById('reg-evento-desc').value; const dataSelecionada = document.getElementById('reg-data-confirm').value;
+            if(!dataSelecionada) return alert("Selecione uma data!");
+            const res = await ipcRenderer.invoke('add-employee-event', { empId: idFichaAtual, tipo: tipo, desc: desc, dataEvento: dataSelecionada });
+            if(res.sucesso) { fecharModal('modal-data-ocorrencia'); document.getElementById('reg-evento-desc').value = ''; const nome = document.getElementById('modal-nome-func').innerText; abrirFicha(idFichaAtual, nome); } else { alert("Erro ao salvar: " + res.msg); }
         }
 
         async function confirmarDesligamento() { const id = document.getElementById('deslig-id').value; const tipo = document.getElementById('deslig-tipo').value; const aviso = document.getElementById('deslig-aviso').value; const obs = document.getElementById('deslig-motivo').value; const pass = document.getElementById('deslig-pass').value; const motivoCompleto = `[${tipo}] - Aviso: ${aviso}. Obs: ${obs}`; const res = await ipcRenderer.invoke('terminate-employee', {id: id, motivo: motivoCompleto, adminPass: pass}); if(res.sucesso) { fecharModal('modal-desligamento'); carregarTudo(); } else { alert(res.msg || "Erro na senha ou processo."); } }
         function abrirDemissao(id, nome) { document.getElementById('deslig-nome').innerText = nome; document.getElementById('deslig-id').value = id; document.getElementById('modal-desligamento').style.display='flex'; }
+
+        // --- GESTÃO DE USUÁRIOS E SENHAS ---
+        async function carregarConfigUsers() {
+            const user = await ipcRenderer.invoke('get-user-info');
+            if(user.cargo === 'admin') {
+                document.getElementById('painel-admin-users').classList.remove('hidden');
+                const defaultPass = await ipcRenderer.invoke('get-sys-config', 'default_pass'); document.getElementById('cfg-padrao-pass').value = defaultPass;
+                const sysUsers = await ipcRenderer.invoke('get-system-users');
+                document.getElementById('tb-users').innerHTML = sysUsers.map(u => {
+                    const resetFlag = u.reset_req ? '<span style="color:#ff5252; font-size:10px; margin-left:5px;">(PEDIU RESET)</span>' : '';
+                    return `<tr><td>${u.username} ${resetFlag}</td><td><span class="cargo-tag">${u.cargo}</span></td><td style="text-align:right;"><button class="action-icon" onclick="resetarSenhaUser(${u.id}, '${u.username}')" title="Resetar para Padrão" style="color:#FFC107;"><span class="material-icons-round">lock_reset</span></button> <button class="action-icon" onclick="deletarUser(${u.id}, '${u.username}')" title="Excluir" style="color:#ff5252;"><span class="material-icons-round">delete</span></button></td></tr>`;
+                }).join('');
+            }
+        }
+        async function salvarSenhaPadrao() { const val = document.getElementById('cfg-padrao-pass').value; if(!val) return alert("Digite uma senha padrão."); await ipcRenderer.invoke('save-sys-config', {key: 'default_pass', value: val}); alert("Senha padrão atualizada!"); }
+        async function resetarSenhaUser(id, nome) { if(confirm(`Resetar a senha de "${nome}" para a senha padrão?`)) { const res = await ipcRenderer.invoke('admin-reset-pass', id); if(res.sucesso) { alert(`Senha de ${nome} resetada para: ${res.novaSenha}`); carregarConfigUsers(); } } }
+        async function deletarUser(id, nome) { if(confirm(`TEM CERTEZA? O usuário "${nome}" perderá o acesso imediatamente.`)) { await ipcRenderer.invoke('delete-user', id); carregarConfigUsers(); } }
+        async function alterarMinhaSenha() { const newPass = document.getElementById('meu-nova-senha').value; const user = await ipcRenderer.invoke('get-user-info'); if(!newPass) return alert("Digite a nova senha."); await ipcRenderer.invoke('change-own-pass', {user: user.username, newPass}); alert("Sua senha foi alterada com sucesso!"); document.getElementById('meu-nova-senha').value = ''; }
+        
+        async function verificarAlertas() {
+            try {
+                const user = await ipcRenderer.invoke('get-user-info');
+                if (['rh', 'gerente', 'admin'].includes(user.cargo)) {
+                    const alertas = await ipcRenderer.invoke('get-notifications');
+                    const painel = document.getElementById('painel-alertas');
+                    if (alertas && alertas.length > 0) {
+                        painel.classList.remove('hidden');
+                        document.getElementById('lista-alertas-conteudo').innerHTML = alertas.map(a => {
+                            if(a.origem === 'SYS') return `<div style="background: rgba(255, 82, 82, 0.2); padding: 8px; border-radius: 4px; margin-bottom: 5px; color: white; font-size: 12px; border:1px solid #ff5252;">🔐 <b>${a.nome}</b> esqueceu a senha!</div>`;
+                            return `<div style="background: rgba(0,0,0,0.2); padding: 8px; border-radius: 4px; margin-bottom: 5px; color: white; font-size: 12px; display:flex; justify-content:space-between;"><span>⚠️ <b>${a.nome}</b></span><span>${a.aso_vencimento ? 'Exame Vencendo' : 'Férias Chegando'}</span></div>`;
+                        }).join('');
+                    } else { painel.classList.add('hidden'); }
+                }
+            } catch(e) { console.log("Sem alertas no momento."); }
+        }
 
         nav('dash');
     </script>

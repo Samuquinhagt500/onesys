@@ -5,35 +5,33 @@
     <title>OneSys Login</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Centralizar apenas no Login */
         body { justify-content: center; align-items: center; }
         .login-box { width: 400px; text-align: center; padding: 50px; }
     </style>
 </head>
 <body>
     <div class="glass-card login-box fade-in">
-        <div class="logo-area" style="justify-content: center; margin-bottom: 40px; font-size: 32px;">
-            OneSys ERP
-        </div>
-        
-        <div class="form-group">
-            <input type="text" id="user" placeholder="Usuário">
-        </div>
-        <div class="form-group">
-            <input type="password" id="pass" placeholder="Senha">
-        </div>
-        
+        <div class="logo-area" style="justify-content: center; margin-bottom: 40px; font-size: 32px;">OneSys ERP</div>
+        <div class="form-group"><input type="text" id="user" placeholder="Usuário"></div>
+        <div class="form-group"><input type="password" id="pass" placeholder="Senha"></div>
         <button class="btn-primary" onclick="tentarLogin()">ACESSAR SISTEMA</button>
+        <p style="margin-top: 15px; font-size: 12px; color: #666;"><a href="#" onclick="pedirReset()" style="color: #00e676; text-decoration: none; transition: 0.3s;">Esqueci a senha</a></p>
         <p id="error-msg" style="color: #ff5252; margin-top: 20px; font-size: 14px; display: none;">Dados incorretos.</p>
     </div>
-
     <script>
         const { ipcRenderer } = require('electron');
         async function tentarLogin() {
-            const u = document.getElementById('user').value;
-            const p = document.getElementById('pass').value;
+            const u = document.getElementById('user').value; const p = document.getElementById('pass').value;
             const res = await ipcRenderer.invoke('login-auth', { user: u, pass: p });
             if(!res.sucesso) document.getElementById('error-msg').style.display = 'block';
+        }
+        async function pedirReset() {
+            const user = document.getElementById('user').value;
+            if(!user) return alert("Por favor, digite seu USUÁRIO no campo acima para solicitar o reset.");
+            if(confirm(`Solicitar reset de senha para o usuário "${user}"? O Administrador será notificado.`)) {
+                const res = await ipcRenderer.invoke('request-pass-reset', user);
+                if(res.sucesso) alert("Solicitação enviada com sucesso! Aguarde o Admin resetar sua senha."); else alert("Erro: " + res.msg);
+            }
         }
     </script>
 </body>
